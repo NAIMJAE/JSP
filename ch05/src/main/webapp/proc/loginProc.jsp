@@ -16,7 +16,7 @@
 			// 사용자의 최소한의 정보만 쿠키로 만들기 (비번, 이름x)
 			Cookie autoCookie = new Cookie("cid", uid);
 			autoCookie.setMaxAge(60 * 3);
-			autoCookie.setPath("/ch05");
+			autoCookie.setPath("/");
 			response.addCookie(autoCookie);
 		}
 		
