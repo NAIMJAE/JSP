@@ -45,10 +45,10 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>user1::register</title>
+		<title>user1::Modify</title>
 	</head>
 	<body>
-		<h3>user1 등록</h3>
+		<h3>user1 수정</h3>
 		
 		<a href="../1.Jdbc.jsp">처음으로</a>
 		<a href="./list.jsp">목록보기</a>

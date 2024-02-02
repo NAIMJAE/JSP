@@ -15,7 +15,7 @@
 		
 		<a href="./user1/list.jsp">User1 CRUD 실습</a> <br>
 		<a href="./user2/list.jsp">User2 CRUD 실습</a> <br>
-		<a href="./user1/list.jsp">User3 CRUD 실습</a> <br>
+		<a href="./User3/list.jsp">User3 CRUD 실습</a> <br>
 		<a href="./user1/list.jsp">User4 CRUD 실습</a> <br>
 		<a href="./user1/list.jsp">User5 CRUD 실습</a> <br>
 	

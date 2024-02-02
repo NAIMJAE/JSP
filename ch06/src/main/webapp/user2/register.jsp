@@ -11,7 +11,7 @@
 		<a href="../1.Jdbc.jsp">처음으로</a>
 		<a href="#">목록보기</a>
 		
-		<form action="./registerProc.jsp">
+		<form action="./registerProc.jsp" method="post">
 			<table border="1">
 			<tr>
 				<td>아이디</td>

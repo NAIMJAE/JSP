@@ -92,6 +92,5 @@
 			</tr>
 			<%} %>
 		</table>
-		
 	</body>
 </html>
