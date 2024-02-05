@@ -1,3 +1,6 @@
+<%@page import="javax.sql.DataSource"%>
+<%@page import="javax.naming.InitialContext"%>
+<%@page import="javax.naming.Context"%>
 <%@page import="kr.co.jaboard1.db.sql"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.Connection"%>
@@ -19,8 +22,10 @@
 	String pass = "abc1234";
 	
 	try {
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		Connection conn = DriverManager.getConnection(host, user, pass);
+		Context initCtx = new InitialContext();
+	    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+	    DataSource ds = (DataSource) envCtx.lookup("jdbc/jboard");
+	    Connection conn = ds.getConnection();
 		
 		PreparedStatement psmt = conn.prepareStatement(sql.INSERT_USER);
 		psmt.setString(1, uid);

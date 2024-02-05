@@ -1,5 +1,8 @@
-<%@page import="kr.co.jaboard1.db.sql"%>
 <%@page import="kr.co.jaboard1.DTO.TermsDTO"%>
+<%@page import="javax.sql.DataSource"%>
+<%@page import="javax.naming.InitialContext"%>
+<%@page import="javax.naming.Context"%>
+<%@page import="kr.co.jaboard1.db.sql"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.sql.Statement"%>
@@ -15,8 +18,11 @@
 	TermsDTO dto = null;
 	//
 	try {
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		Connection conn = DriverManager.getConnection(host, user, pass);
+		Context initCtx = new InitialContext();
+	    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+	    DataSource ds = (DataSource) envCtx.lookup("jdbc/jboard");
+	    Connection conn = ds.getConnection();
+
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(sql.SELECT_TERMS);
 		
