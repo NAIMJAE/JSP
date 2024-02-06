@@ -5,6 +5,13 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	List<ArticleDTO> articles = ArticleDAO.getInstance().selectArticles();
+	
+	int n = Integer.parseInt(request.getParameter("n"));
+	int m = n-1;
+	List<ArticleDTO> newlist = new ArrayList<>();
+	for (int i=(n-1)*5 ; i < (n*5) ; i++) {
+		newlist.add(articles.get(i));
+	}
 %>
 <%@ include file="./_header.jsp" %>
 	<main>
@@ -19,7 +26,7 @@
 	                    <th>날짜</th>
 	                    <th>조회</th>
 	                </tr>
-	                <% for (ArticleDTO article : articles) {%>
+	                <% for (ArticleDTO article : newlist) {%>
 					<tr>
 						<td><%= article.getNo() %></td>
 						<td><a href="./view.jsp?no=<%= article.getNo()%>"><%= article.getTitle() %></a>[<%= article.getComment()%>]</td>
@@ -33,9 +40,9 @@
 	        <!--페이지 네비게이션-->
 	        <div class="paging">
 	            <a href="#" class="prev">이전</a>
-	            <a href="#" class="num_current">1</a>
-	            <a href="#" class="num">2</a>
-	            <a href="#" class="num">3</a>
+	            <a href="/Jboard1/list.jsp?n=1" class="num_current">1</a>
+	            <a href="/Jboard1/list.jsp?n=2" class="num">2</a>
+	            <a href="/Jboard1/list.jsp?n=3" class="num">3</a>
 	            <a href="#" class="num">4</a>
 	            <a href="#" class="num">5</a>
 	            <a href="#" class="next">다음</a>

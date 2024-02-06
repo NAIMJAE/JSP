@@ -12,7 +12,7 @@
 	    <section class="view">
 	       <h3>글보기</h3>
 	
-	        <table border="0">
+	        <table>
 	            <tr>
 	                <td>제목</td>
 	                <td><input type="text" name="title" value="<%= articles.getTitle() %>" readonly></td>

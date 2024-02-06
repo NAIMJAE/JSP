@@ -22,7 +22,7 @@
 		// 회원일 경우 (회원 세션 저장)
 		session.setAttribute("sessUser", user);
 		// 글목록으로 이동
-		response.sendRedirect("/Jboard1/list.jsp");
+		response.sendRedirect("/Jboard1/list.jsp?n=1");
 		
 	}else {
 		// 회원이 아닐 경우
