@@ -3,8 +3,9 @@
 	<main>
 	    <section class="write">
 	       <h3>글쓰기</h3>
-	        <form action="#">
-	            <table border="0">
+	        <form action="/Jboard1/User/proc/writeProc.jsp" method="post">
+	        	<input type="hidden" name="writer" value="<%= sessUser.getUid()%>">
+	            <table>
 	                <tr>
 	                    <td>제목</td>
 	                    <td><input type="text" name="title" value="제목을 입력하세요."></td>
@@ -21,8 +22,8 @@
 	                </tr>
 	            </table>
 	            <div>
-	                <a href="#" class="btnCancel">취소</a>
-	                <a href="#" class="btnWrite">작성완료</a>
+	                <a href="/Jboard1/list.jsp" class="btnCancel">취소</a>
+	                <input type="submit" class="btnWrite" value="작성완료">
 	            </div>
 	        </form>
 	        

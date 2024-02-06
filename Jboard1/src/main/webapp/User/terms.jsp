@@ -1,3 +1,4 @@
+<%@page import="kr.co.jaboard1.DAO.UserDAO"%>
 <%@page import="kr.co.jaboard1.DTO.TermsDTO"%>
 <%@page import="javax.sql.DataSource"%>
 <%@page import="javax.naming.InitialContext"%>
@@ -11,34 +12,7 @@
 <%@page import="java.sql.DriverManager"%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-	String host = "jdbc:mysql://127.0.0.1:3306/Jboard";
-	String user = "naimjae";
-	String pass = "abc1234";
-	
-	TermsDTO dto = null;
-	//
-	try {
-		Context initCtx = new InitialContext();
-	    Context envCtx = (Context) initCtx.lookup("java:comp/env");
-	    DataSource ds = (DataSource) envCtx.lookup("jdbc/jboard");
-	    Connection conn = ds.getConnection();
-
-		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery(sql.SELECT_TERMS);
-		
-		if (rs.next()) {
-			dto = new TermsDTO();
-			dto.setTerms(rs.getString(1));
-			dto.setPrivacy(rs.getString(2));
-		}
-		
-		conn.close();
-		stmt.close();
-		rs.close();
-	
-	}catch (Exception e) {
-		e.printStackTrace();
-	}
+	TermsDTO dto= UserDAO.getInstance().selectTerms();
 %>
 
 <%@ include file="./_header.jsp" %>

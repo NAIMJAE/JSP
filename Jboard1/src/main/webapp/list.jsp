@@ -1,4 +1,11 @@
+<%@page import="kr.co.jaboard1.DAO.ArticleDAO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="kr.co.jaboard1.DTO.ArticleDTO"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	List<ArticleDTO> articles = ArticleDAO.getInstance().selectArticles();
+%>
 <%@ include file="./_header.jsp" %>
 	<main>
 	    <section class="list">
@@ -12,13 +19,15 @@
 	                    <th>날짜</th>
 	                    <th>조회</th>
 	                </tr>
-	                <tr>
-	                    <td>1</td>
-	                    <td><a href="#">테스트 제목1입니다.</a>[3]</td>
-	                    <td>길동이</td>
-	                    <td>24-01-29</td>
-	                    <td>12</td>
-	                </tr>
+	                <% for (ArticleDTO article : articles) {%>
+					<tr>
+						<td><%= article.getNo() %></td>
+						<td><a href="./view.jsp?no=<%= article.getNo()%>"><%= article.getTitle() %></a>[<%= article.getComment()%>]</td>
+						<td><%= article.getWriter()%></td>
+						<td><%= article.getRdate()%></td>
+						<td><%= article.getHit()%></td>
+					</tr>
+					<% } %>
 	            </table>
 	        </article>
 	        <!--페이지 네비게이션-->
@@ -32,7 +41,7 @@
 	            <a href="#" class="next">다음</a>
 	        </div>
 	        <div>
-	            <a href="#" class="btnWrite">글쓰기</a>
+	            <a href="/Jboard1/write.jsp" class="btnWrite">글쓰기</a>
 	        </div>
 	    </section>
 	</main>

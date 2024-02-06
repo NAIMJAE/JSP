@@ -1,3 +1,5 @@
+<%@page import="kr.co.jaboard1.DTO.UserDTO"%>
+<%@page import="kr.co.jaboard1.DAO.UserDAO"%>
 <%@page import="javax.sql.DataSource"%>
 <%@page import="javax.naming.InitialContext"%>
 <%@page import="javax.naming.Context"%>
@@ -17,32 +19,18 @@
 	String hp = request.getParameter("hp");
 	String regip = request.getRemoteAddr();
 	
-	String host = "jdbc:mysql://127.0.0.1:3306/Jboard";
-	String user = "naimjae";
-	String pass = "abc1234";
+	// 사용자 객체 생성
+	UserDTO user = new UserDTO();
+	user.setUid(uid);
+	user.setPass(pass1);
+	user.setName(name);
+	user.setNick(nick);
+	user.setEmail(email);
+	user.setHp(hp);
+	user.setRegip(regip);
 	
-	try {
-		Context initCtx = new InitialContext();
-	    Context envCtx = (Context) initCtx.lookup("java:comp/env");
-	    DataSource ds = (DataSource) envCtx.lookup("jdbc/jboard");
-	    Connection conn = ds.getConnection();
-		
-		PreparedStatement psmt = conn.prepareStatement(sql.INSERT_USER);
-		psmt.setString(1, uid);
-		psmt.setString(2, pass1);
-		psmt.setString(3, name);
-		psmt.setString(4, nick);
-		psmt.setString(5, email);
-		psmt.setString(6, hp);
-		psmt.setString(7, regip);
-		
-		psmt.executeUpdate();
-		
-		psmt.close();
-		conn.close();
-		
-	}catch (Exception e) {
-		e.printStackTrace();
-	}
+	// 사용자 등록
+	UserDAO.getInstance().insertUser(user);
+	// 로그인 페이지로 이동
 	response.sendRedirect("/Jboard1/User/login.jsp");
 %>
