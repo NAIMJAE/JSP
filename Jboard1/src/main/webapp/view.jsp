@@ -4,8 +4,22 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%	
 	request.setCharacterEncoding("UTF-8");
-	int no = Integer.parseInt(request.getParameter("no"));
+	String no = request.getParameter("no");
+	
+	ArticleDAO dao = ArticleDAO.getInstance();
+	
+	// 글 조회
 	ArticleDTO articles = ArticleDAO.getInstance().selectArticle(no);
+	
+	// 글 조회 카운트 업데이트
+	dao.updateHitCount(no);
+	
+	// 세션 가져오기
+	UserDTO user = (UserDTO) session.getAttribute("sessUser");
+	boolean userCheck = false;
+	if (user.getUid().equals(articles.getWriter())) {
+		userCheck = true;
+	}
 %>
 <%@ include file="./_header.jsp" %>
 	<main>
@@ -17,6 +31,7 @@
 	                <td>제목</td>
 	                <td><input type="text" name="title" value="<%= articles.getTitle() %>" readonly></td>
 	            </tr>
+	            <% if(articles.getFile() > 0){ %>
 	            <tr>
 	                <td>첨부파일</td>
 	                <td>
@@ -24,6 +39,7 @@
 	                    <span><%= articles.getFile() %>회 다운로드</span>
 	                </td>
 	            </tr>
+	            <%} %>
 	            <tr>
 	                <td>내용</td>
 	                <td>
@@ -32,9 +48,11 @@
 	            </tr>
 	        </table>
 	        <div>
-	            <a href="#" class="btnDelete">삭제</a>
-	            <a href="#" class="btnModify">수정</a>
-	            <a href="./list.jsp" class="btnList">목록</a>
+	        	<% if(userCheck == true) {%>
+	            <a href="./User/proc/deleteProc.jsp?no=<%= articles.getNo()%>" class="btnDelete">삭제</a>
+	            <a href="./modify.jsp?no=<%= articles.getNo()%>" class="btnModify">수정</a>
+	            <%} %>
+	            <a href="./list.jsp?" class="btnList">목록</a>
 	        </div>
 	
 	        <!--댓글 리스트-->
@@ -59,7 +77,7 @@
 	        <!--댓글입력폼-->
 	        <section class="commentForm">
 	            <h3>댓글쓰기</h3>
-	            <form action="#">
+	            <form action="./User/commentForm.jsp?no=<%= articles.getNo() %>">
 	                <textarea name="comment"></textarea>
 	                <div>
 	                    <a href="#" class="btnCancel">취소</a>

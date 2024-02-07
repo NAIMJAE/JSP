@@ -4,14 +4,46 @@
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-	List<ArticleDTO> articles = ArticleDAO.getInstance().selectArticles();
+	request.setCharacterEncoding("UTF-8");
+	String pg = request.getParameter("pg");
 	
-	int n = Integer.parseInt(request.getParameter("n"));
-	int m = n-1;
-	List<ArticleDTO> newlist = new ArrayList<>();
-	for (int i=(n-1)*5 ; i < (n*5) ; i++) {
-		newlist.add(articles.get(i));
+	ArticleDAO dao = ArticleDAO.getInstance();
+	
+	// 전체 글 갯수 조회
+	int total = dao.SelectCountTotal();
+	
+	// 마지막 페이지 번호 계산
+	int lastPageNum = 0;
+	
+	if(total % 10 == 0){
+		lastPageNum = (total / 10);		
+	}else {
+		lastPageNum = (total / 10) + 1;
 	}
+	
+	// 현재 페이지 번호
+	int currentPg = 1;
+	
+	if(pg != null){
+		currentPg = Integer.parseInt(pg);
+	}
+	
+	// limit 시작값 계산
+	int start = (currentPg - 1) * 10;
+	
+	// 페이지번호 그룹 계산
+	int pageGroupCurrent = (int) Math.ceil(currentPg / 10.0);
+	int pageGroupStart = (pageGroupCurrent - 1) * 10 + 1;
+	int pageGroupEnd   = pageGroupCurrent * 10;
+	
+	if(pageGroupEnd > lastPageNum){
+		pageGroupEnd = lastPageNum;
+	}
+	// 페이지 시작번호 계산
+	int pageStartNum = total - start;
+	
+	// 글 조회
+	List<ArticleDTO> articles = dao.selectArticles(start);
 %>
 <%@ include file="./_header.jsp" %>
 	<main>
@@ -26,12 +58,12 @@
 	                    <th>날짜</th>
 	                    <th>조회</th>
 	                </tr>
-	                <% for (ArticleDTO article : newlist) {%>
+	                <% for (ArticleDTO article : articles) {%>
 					<tr>
-						<td><%= article.getNo() %></td>
-						<td><a href="./view.jsp?no=<%= article.getNo()%>"><%= article.getTitle() %></a>[<%= article.getComment()%>]</td>
-						<td><%= article.getWriter()%></td>
-						<td><%= article.getRdate()%></td>
+						<td><%= pageStartNum-- %></td>
+						<td><a href="./view.jsp?no=<%= article.getNo()%>"><%= article.getTitle() %></a>&nbsp;[<%= article.getComment()%>]</td>
+						<td><%= article.getNick()%></td>
+						<td><%= article.getRdate().substring(2, 10) %></td>
 						<td><%= article.getHit()%></td>
 					</tr>
 					<% } %>
@@ -39,13 +71,16 @@
 	        </article>
 	        <!--페이지 네비게이션-->
 	        <div class="paging">
-	            <a href="#" class="prev">이전</a>
-	            <a href="/Jboard1/list.jsp?n=1" class="num_current">1</a>
-	            <a href="/Jboard1/list.jsp?n=2" class="num">2</a>
-	            <a href="/Jboard1/list.jsp?n=3" class="num">3</a>
-	            <a href="#" class="num">4</a>
-	            <a href="#" class="num">5</a>
-	            <a href="#" class="next">다음</a>
+	        	<% if(pageGroupStart > 1) { %>
+	            <a href="/Jboard1/list.jsp?pg=<%= pageGroupStart - 1 %>" class="prev">이전</a>
+	            <% } %>
+	            
+	            <% for(int n=pageGroupStart ; n <=pageGroupEnd ; n++) {%>
+	            <a href="/Jboard1/list.jsp?pg=<%= n %>" class="num<%=(currentPg == n) ? "_current" : "" %>"><%= n %></a>
+	            <%} %>
+	            <% if(pageGroupEnd < lastPageNum) { %>
+	            <a href="/Jboard1/list.jsp?pg=<%= pageGroupEnd + 1 %>" class="next">다음</a>
+	            <% } %>
 	        </div>
 	        <div>
 	            <a href="/Jboard1/write.jsp" class="btnWrite">글쓰기</a>

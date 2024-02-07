@@ -1,34 +1,35 @@
 package kr.co.jaboard1.DTO;
 
 public class ArticleDTO {
-	private String no;
-	private String parent;
-	private String comment;
+	private int no;
+	private int parent;
+	private int comment;
 	private String cate;
 	private String title;
 	private String content;
-	private String file;
-	private String hit;
+	private int file;
+	private int hit;
 	private String writer;
 	private String regip;
 	private String rdate;
+	private String nick;
 	
-	public String getNo() {
+	public int getNo() {
 		return no;
 	}
-	public void setNo(String no) {
+	public void setNo(int no) {
 		this.no = no;
 	}
-	public String getParent() {
+	public int getParent() {
 		return parent;
 	}
-	public void setParent(String parent) {
+	public void setParent(int parent) {
 		this.parent = parent;
 	}
-	public String getComment() {
+	public int getComment() {
 		return comment;
 	}
-	public void setComment(String comment) {
+	public void setComment(int comment) {
 		this.comment = comment;
 	}
 	public String getCate() {
@@ -49,16 +50,16 @@ public class ArticleDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getFile() {
+	public int getFile() {
 		return file;
 	}
-	public void setFile(String file) {
+	public void setFile(int file) {
 		this.file = file;
 	}
-	public String getHit() {
+	public int getHit() {
 		return hit;
 	}
-	public void setHit(String hit) {
+	public void setHit(int hit) {
 		this.hit = hit;
 	}
 	public String getWriter() {
@@ -79,10 +80,16 @@ public class ArticleDTO {
 	public void setRdate(String rdate) {
 		this.rdate = rdate;
 	}
+	public String getNick() {
+		return nick;
+	}
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
 	@Override
 	public String toString() {
 		return "ArticleDTO [no=" + no + ", parent=" + parent + ", comment=" + comment + ", cate=" + cate + ", title="
 				+ title + ", content=" + content + ", file=" + file + ", hit=" + hit + ", writer=" + writer + ", regip="
-				+ regip + ", rdata=" + rdate + "]";
+				+ regip + ", rdate=" + rdate + ", nick=" + nick + "]";
 	}
 }

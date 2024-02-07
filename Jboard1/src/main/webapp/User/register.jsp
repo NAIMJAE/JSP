@@ -3,7 +3,7 @@
 	<main>
 	    <section class="register">
 	        <form action="/Jboard1/User/proc/registerProc.jsp" method="post">
-	            <table border="0">
+	            <table>
 	                <caption>사이트 이용정보 입력</caption>
 	                <tr>
 	                    <td>아이디</td>
@@ -28,7 +28,7 @@
 	                </tr>
 	            </table>
 	
-	            <table border="0">
+	            <table>
 	                <caption>개인 정보 입력</caption>
 	                <tr>
 	                    <td>이름</td>
