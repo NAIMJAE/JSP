@@ -132,15 +132,23 @@ public class ArticleDAO extends DBHelper {
 			}
 		}
 		
-		public void deleteArticle(int no) {
+		public void deleteArticle(String no) {
 			try {
 				conn = getConnection();
-				psmt = conn.prepareStatement(sql.DELETE_ARTICLE);
-				psmt.setInt(1, no);
+				conn.setAutoCommit(false);
 				
+				psmt = conn.prepareStatement(sql.DELETE_ARTICLE);
+				psmt.setString(1, no);
 				System.out.println(psmt);
 				
+				psmtEtc1 = conn.prepareStatement(sql.DELETE_COMMENTS);
+				psmtEtc1.setString(1, no);
+				System.out.println(psmtEtc1);
+				
 				psmt.executeUpdate();
+				psmtEtc1.executeUpdate();
+				
+				conn.commit();
 				CloseAll();
 				
 			}catch (Exception e) {
@@ -175,6 +183,93 @@ public class ArticleDAO extends DBHelper {
 				System.out.println(psmt);
 				
 				psmt.executeUpdate();
+				CloseAll();
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public void insertComment(ArticleDTO comment) {
+			
+			try {
+				conn = getConnection();
+				conn.setAutoCommit(false); // 트랜잭션 시작
+				
+				psmt = conn.prepareStatement(sql.INSERT_COMMENT);
+				psmt.setInt(1, comment.getParent());
+				psmt.setString(2, comment.getContent());
+				psmt.setString(3, comment.getWriter());
+				psmt.setString(4, comment.getRegip());
+				System.out.println(psmt);
+				
+				psmtEtc1 = conn.prepareStatement(sql.UPDATE_ARTICLE_COMMENT_PLUS);
+				psmtEtc1.setInt(1, comment.getParent());
+				System.out.println(psmtEtc1);
+				
+				psmt.executeUpdate();
+				psmtEtc1.executeUpdate();
+				
+				conn.commit();
+				
+				CloseAll();
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public List<ArticleDTO> selectComments(String parent) {
+			List<ArticleDTO> comments = new ArrayList<>();
+			
+			try {
+				conn = getConnection();
+				psmt = conn.prepareStatement(sql.SELECT_COMMENTS);
+				psmt.setString(1, parent);
+				
+				rs = psmt.executeQuery();
+				
+				while(rs.next()) {
+					
+					ArticleDTO comment = new ArticleDTO();
+					comment.setNo(rs.getInt(1));
+					comment.setParent(rs.getInt(2));
+					comment.setContent(rs.getString(6));
+					comment.setWriter(rs.getString(9));
+					comment.setRegip(rs.getString(10));
+					comment.setRdate(rs.getString(11));
+					comment.setNick(rs.getString(15));
+					
+					comments.add(comment);
+				}
+				
+				rs.close();
+				conn.close();
+				stmt.close();
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return comments;
+		}
+		
+		public void deleteComment(String parent, String no) {
+			try {
+				conn = getConnection();
+				conn.setAutoCommit(false);
+				
+				psmt = conn.prepareStatement(sql.DELETE_COMMENT);
+				psmt.setString(1, no);
+				System.out.println(psmt);
+				
+				psmtEtc1 = conn.prepareStatement(sql.UPDATE_ARTICLE_COMMENT_MINUS);
+				psmtEtc1.setString(1, parent);
+				System.out.println(psmtEtc1);
+				
+				psmt.executeUpdate();
+				psmtEtc1.executeUpdate();
+				
+				conn.commit();
 				CloseAll();
 				
 			}catch (Exception e) {

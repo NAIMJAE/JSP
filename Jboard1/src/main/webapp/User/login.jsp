@@ -12,8 +12,8 @@
 	                    <td><img src="/Jboard1/images/login_ico_pw.png" alt="비밀번호"></td>
 	                    <td><input type="password" name="pass" placeholder="비밀번호 입력"></td>
 	                </tr>
-	                <input type="submit" value="로그인">
 	            </table>
+	            <input type="submit" value="로그인">
 	        </form>
 	        <div>
 	            <h3>회원 로그인 안내</h3>

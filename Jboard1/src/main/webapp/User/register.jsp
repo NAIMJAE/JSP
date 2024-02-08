@@ -53,14 +53,14 @@
 	                <tr>
 	                    <td>휴대폰</td>
 	                    <td>
-	                        <input type="text" name="hp" placeholder="-포합 13자리 입력 입력" required minlength="13" maxlength="13">
+	                        <input type="text" name="hp" placeholder="-포합 13자리 입력 입력" required maxlength="13">
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <td>주소</td>
 	                    <td>
 	                        <input type="text" name="zip" placeholder="우편번호">
-	                        <button><img src="../images/chk_post.gif" alt="우편번호 검색" readonly></button>
+	                        <button><img src="../images/chk_post.gif" alt="우편번호 검색"></button>
 	                        <div>
 	                            <input type="text" name="addr1" placeholder="주소를 검색하세요" readonly>
 	                        </div>

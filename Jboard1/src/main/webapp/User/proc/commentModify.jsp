@@ -1,8 +1,6 @@
-<%@page import="kr.co.jaboard1.DAO.ArticleDAO"%>
-<%@page import="kr.co.jaboard1.DTO.ArticleDTO"%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-	// 글 수정 값 받아오기
+	//댓글 수정 값 받아오기
 	request.setCharacterEncoding("UTF-8");
 
 	int no = Integer.parseInt(request.getParameter("no"));
@@ -19,4 +17,5 @@
 	dao.updateArticle(article);
 	
 	response.sendRedirect("/Jboard1/view.jsp?no="+article.getNo());
+
 %>

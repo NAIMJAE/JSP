@@ -23,12 +23,20 @@ public class sql {
 												+ "`regip`=?, "
 												+ "`rdate`=NOW()";
 	
+	public static final String INSERT_COMMENT = "INSERT INTO `Article` SET "
+												+ "`parent`=?, "
+												+ "`content`=?, "
+												+ "`writer`=?, "
+												+ "`regip`=?, "
+												+ "`rdate`=NOW()";
+	
 	public static final String SELECT_ARTICLE = "SELECT * FROM `Article` WHERE `no`=?";
 
-	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `Article`";
+	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `Article` WHERE `parent`=0";
 	
 	public static final String SELECT_ARTICLES = "SELECT a.*, b.nick FROM `Article` AS a "
 												+ "JOIN `User` AS b ON a.writer = b.uid "
+												+ "WHERE `parent`=0 "
 												+ "ORDER BY `no` DESC "
 												+ "LIMIT ?, 10";
 	
@@ -39,5 +47,18 @@ public class sql {
 												+ "`content` = ? "
 												+ " WHERE `no`=?";
 	public static final String DELETE_ARTICLE = "DELETE FROM `Article` WHERE `no`=?";
+	
+	public static final String DELETE_COMMENT = "DELETE FROM `Article` WHERE `no`=?";
+
+	public static final String DELETE_COMMENTS = "DELETE FROM `Article` WHERE `parent`=?";
+	
+	
+	public static final String SELECT_COMMENTS = "SELECT * FROM `Article` AS a "
+												+ "JOIN `User` AS b ON a.writer = b.uid "
+												+ "WHERE `parent`=? "
+												+ "ORDER BY `no` ASC";
+	
+	public static final String UPDATE_ARTICLE_COMMENT_PLUS = "UPDATE `Article` SET `comment` = `comment` + 1 WHERE `no`=?";
+	public static final String UPDATE_ARTICLE_COMMENT_MINUS = "UPDATE `Article` SET `comment` = `comment` - 1 WHERE `no`=?";
 	
 }

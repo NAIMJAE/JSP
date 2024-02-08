@@ -5,10 +5,10 @@
 	// 글 번호 받아오기
 	request.setCharacterEncoding("UTF-8");
 	
-	int no = Integer.parseInt(request.getParameter("no"));
+	String no = request.getParameter("no");
 	
 	// 글 삭제하기
 	ArticleDAO.getInstance().deleteArticle(no);
 	
-	response.sendRedirect("../../list.jsp");
+	response.sendRedirect("/Jboard1/list.jsp");
 %>
