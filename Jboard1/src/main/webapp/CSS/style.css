@@ -213,7 +213,32 @@ main > section {}
     box-sizing: border-box;
     margin: 60px auto;
 }
-.list > h3 {}
+.list form.search {
+    float: right;
+    margin-top: -16px;
+    margin-bottom: 4px;
+}
+.list form.search > select {
+    width: 80px;
+    height: 26px;
+    border: 1px solid #d7d7d7;
+    outline: none;
+}
+.list form.search > input[name=keyword]{
+    width: 200px;
+    height: 26px;
+    text-indent: 6px;
+    border: 1px solid #d7d7d7;
+}
+.list form.search > input[type=submit]{
+    border: 1px solid #d7d7d7;
+    background: #f2f2f2; 
+    color: #111;
+    padding: 6px;
+}
+.list > h3 {
+	
+}
 .list > article {}
 .list > article > table {
     width: 100%;
@@ -318,12 +343,12 @@ main > section {}
     text-align: center;
     padding: 20px 0;
 }
-.view > .commentList > article {
+.view > .commentList  article {
     border-top: 1px dotted #999;
     margin-top: 10px;
     padding-top: 10px;
 }
-.view > .commentList > article > textarea {
+.view > .commentList  article > textarea {
     border: 0;
     width: 100%;
     height: 60px;

@@ -46,10 +46,31 @@
 	List<ArticleDTO> articles = dao.selectArticles(start);
 %>
 <%@ include file="./_header.jsp" %>
+<script type="text/javascript">
+	window.onload = function(){
+		
+		//const searchForm = document.getElementsByClassName('search')[0];
+		const btnSearch = document.search.submit;
+		btnSearch.onclick = ()=>{
+			alert('검색클릭!');
+		}
+	}
+</script>
 	<main>
 	    <section class="list">
 	        <h3>글 목록</h3>
 	        <article>
+	        	<!-- 검색 -->
+	        	<form action="/Jboard1/User/proc/searchProc.jsp" class="search" name="search">
+	        		<select name="searchType">
+	        			<option value="title">제목</option>
+	        			<option value="content">내용</option>
+	        			<option value="title_content">제목+내용</option>
+	        			<option value="writer">작성자</option>
+	        		</select>
+	        		<input type="text" name="keyword" placeholder="검색 키워드 입력">
+	        		<input type="submit" name="submit" value="검색">
+	        	</form>
 	            <table>
 	                <tr>
 	                    <th>번호</th>

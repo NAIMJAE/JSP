@@ -21,6 +21,29 @@
 <script type="text/javascript">
 	
 	window.onload = function(){
+		// 원글 수정 버튼
+		const btnModify = document.querySelector('.btnModify');
+		
+		if(btnModify != null){			
+			btnModify.onclick = ()=>{
+				if(confirm('수정 하시겠습니까?')){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		}
+		
+		// 원글삭제
+		const btnDelete = document.querySelector('.btnDelete');
+		
+		btnDelete.onclick = () => {
+			if(confirm('정말 삭제 하시겠습니까?')){
+				return true;
+			}else{
+				return false;
+			}
+		}
 		
 		// 댓글 작성 취소 버튼
 		const btnCancel = document.getElementsByClassName('btnCancel')[0];
@@ -47,7 +70,38 @@
 		});
 		
 		// 댓글 수정
-		
+		const mod = document.querySelectorAll('.mod');
+		mod.forEach((item)=>{
+			item.onclick = function(e){
+				e.preventDefault(); // a태그 해제
+				
+				if(this.innerText == '수정') {
+					// 수정 모드 전환
+					this.innerText = '수정완료';
+					const textarea = this.parentElement.previousElementSibling; // 부모 선택 + 이전 형제 선택
+					textarea.readOnly = false;
+					textarea.style.background = 'white';
+					textarea.style.border = '1px solid black';
+					
+					// 포커스를 문장의 제일 뒤로 설정
+					textarea.focus();
+					const textLength = textarea.value.length;
+					textarea.selectionStart = textLength;
+					textarea.selectionEnd = textLength;
+				}else{
+					// 수정 완료 클릭
+					const form = this.closest('form'); // 상위 노드에서 가장 가까운 태그 찾기
+					form.submit();
+					
+					// 수정 모드 해제
+					this.innerText = '수정';
+					const textarea = this.parentElement.previousElementSibling; // 부모 선택 + 이전 형제 선택
+					textarea.readOnly = true;
+					textarea.style.background = 'transparent';
+					textarea.style.border = 'none';
+				}
+			}
+		});
 	}
 </script>
 	<main>
@@ -87,19 +141,24 @@
 	        <section class="commentList">
 	            <h3>댓글목록</h3>
 	            <%for (ArticleDTO comment : comments) {%>
+	            <form action="/Jboard1/User/proc/commentUpdate.jsp" method="post">
+	            <input type="hidden" name="no" value="<%= comment.getNo()%>">
+	            <input type="hidden" name="parent" value="<%= comment.getParent()%>">
 	            <article class="comment">
 	                <span>
 	                    <span><%=comment.getNick() %></span>
 	                    <span><%=comment.getRdate() %></span>
 	                </span>
-	                <textarea name="comment" readonly><%=comment.getContent() %></textarea>
+	                <textarea name="content" readonly><%=comment.getContent() %></textarea>
+	                
 	                <% if(comment.getWriter().equals(sessUser.getUid())) { %>
 	                <div>
 	                    <a href="./User/proc/CommentDelete.jsp?no=<%= comment.getNo()%>&parent=<%= comment.getParent()%>" class="btnDelete">삭제</a>
-	                    <a href="#" class="btnModify">수정</a>
+	                    <a href="#" class="mod btnModify">수정</a>
 	                </div>
 	                <%} %>
 	            </article>
+	            </form>
 	            <%} %>
 	            
 	            <% if(comments.isEmpty()) {%>

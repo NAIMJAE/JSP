@@ -8,6 +8,7 @@
 	int no = Integer.parseInt(request.getParameter("no"));
 	String title = request.getParameter("title");
 	String content = request.getParameter("content");
+	String file = request.getParameter("file");
 	
 	// 글 수정하기
 	ArticleDTO article = new ArticleDTO();

@@ -17,6 +17,7 @@
 	String nick = request.getParameter("nick");
 	String email = request.getParameter("email");
 	String hp = request.getParameter("hp");
+	String sms = request.getParameter("sms");
 	String regip = request.getRemoteAddr();
 	
 	// 사용자 객체 생성
@@ -27,6 +28,7 @@
 	user.setNick(nick);
 	user.setEmail(email);
 	user.setHp(hp);
+	user.setSms(sms);
 	user.setRegip(regip);
 	
 	// 사용자 등록

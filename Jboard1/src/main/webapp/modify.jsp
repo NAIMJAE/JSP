@@ -8,11 +8,27 @@
 	ArticleDAO dao = ArticleDAO.getInstance();
 	
 	// 글 조회
-	ArticleDTO articles = ArticleDAO.getInstance().selectArticle(no);
+	ArticleDTO articles = dao.selectArticle(no);
 
 %>
 
 <%@ include file="./_header.jsp" %>
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+	    // 페이지가 로드될 때 실행될 함수
+	    function pageFocus() {
+			var contentFocus = document.getElementById('content');
+			if (contentFocus) {
+	            contentFocus.focus();
+	            
+	            const textLength = contentFocus.value.length;
+	            contentFocus.selectionStart = textLength;
+	            contentFocus.selectionEnd = textLength;
+			}
+    	}
+	    pageFocus();
+	});
+</script>
 	<main>
 	    <section class="modify">
 	       <h3>글수정</h3>
@@ -21,11 +37,11 @@
 	            <table>
 	                <tr>
 		                <td>제목</td>
-		                <td><input type="text" name="title" value="<%= articles.getTitle() %>" required></td>
+		                <td><input type="text" name="title" value="<%= articles.getTitle() %>"></td>
 		            </tr>
 	                <tr>
 	                    <td>내용</td>
-	                    <td><textarea name="content" required><%= articles.getContent() %></textarea></td>
+	                    <td><textarea id="content" name="content"><%= articles.getContent() %></textarea></td>
 	                </tr>
 	                <tr>
 	                    <td>첨부</td>

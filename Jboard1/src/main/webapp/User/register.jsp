@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	Boolean agree = (Boolean)session.getAttribute("agree");
+	String sms = (String)session.getAttribute("sms");
 
+	
 	if(agree == null ) {
 		response.sendRedirect("/Jboard1/User/terms.jsp");
 		return;
@@ -11,6 +13,7 @@
 	<main>
 	    <section class="register">
 	        <form action="/Jboard1/User/proc/registerProc.jsp" method="post">
+	        	<input type="hidden" name="sms" value="<%= sms %>">
 	            <table>
 	                <caption>사이트 이용정보 입력</caption>
 	                <tr>

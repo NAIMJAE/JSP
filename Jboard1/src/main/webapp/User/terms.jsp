@@ -44,9 +44,7 @@
 		            <caption>사이트 이용약관</caption>
 		            <tr>
 		                <td>
-		                    <textarea readonly>
-								<%= dto.getTerms() %>
-							</textarea>
+		                    <textarea readonly><%= dto.getTerms() %></textarea>
 		                    <p>
 		                        <label><input type="checkbox" name="chk1"> 동의합니다.</label>
 		                    </p>
@@ -62,6 +60,19 @@
 							</textarea>
 		                    <p>
 		                        <label><input type="checkbox" name="chk2"> 동의합니다.</label>
+		                    </p>
+		                </td>
+		            </tr>
+		        </table>
+		        <table>
+		            <caption>마케팅 수신 동의(선택)</caption>
+		            <tr>
+		                <td>
+		                    <textarea readonly>
+								<%= dto.getSms() %>
+							</textarea>
+		                    <p>
+		                        <label><input type="checkbox" name="sms" value="Y"> 동의합니다.</label>
 		                    </p>
 		                </td>
 		            </tr>
