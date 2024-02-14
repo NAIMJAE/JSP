@@ -34,10 +34,10 @@ public class DBHelper {
 			psmt.close();
 		}
 		if(psmtEtc1 != null) {
-			psmt.close();
+			psmtEtc1.close();
 		}
 		if(psmtEtc2 != null) {
-			psmt.close();
+			psmtEtc2.close();
 		}
 		if(stmt != null) {
 			stmt.close();

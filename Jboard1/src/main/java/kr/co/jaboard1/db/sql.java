@@ -33,25 +33,26 @@ public class sql {
 	
 	public static final String SELECT_ARTICLE = "SELECT * FROM `Article` WHERE `no`=?";
 
-	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `Article` WHERE `parent`=0";
+	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `Article` AS a "
+												+ "JOIN `User` AS b ON a.writer = b.uid "
+												+ "WHERE `parent`=0 ";
 	
 	public static final String SELECT_ARTICLES = "SELECT a.*, b.nick FROM `Article` AS a "
 												+ "JOIN `User` AS b ON a.writer = b.uid "
-												+ "WHERE `parent`=0 "
-												+ "ORDER BY `no` DESC "
-												+ "LIMIT ?, 10";
+												+ "WHERE `parent`=0 ";
 	
 	public static final String SELECT_COMMENTS = "SELECT * FROM `Article` AS a "
 												+ "JOIN `User` AS b ON a.writer = b.uid "
 												+ "WHERE `parent`=? "
 												+ "ORDER BY `no` ASC";
 	
-	public static final String SELECT_SEARCH_ARTICLE = "SELECT a.*, b.nick FROM `Article` AS a "
-													+ "JOIN `User` AS b ON a.writer = b.uid "
-													+ "WHERE `parent`=0 AND `?`=?"
-													+ "ORDER BY `no` DESC "
-													+ "LIMIT ?, 10";
+	public static final String SELECT_ARTICLES_WHERE_TITLE = "AND `title` LIKE ? ";
+	public static final String SELECT_ARTICLES_WHERE_CONTENT = "AND `content` LIKE ? ";
+	public static final String SELECT_ARTICLES_WHERE_TITLE_CONTENT = "AND (`title` LIKE ? OR `content` LIKE ?) ";
+	public static final String SELECT_ARTICLES_WHERE_WRITER = "AND `nick` LIKE ? ";
 	
+	public static final String SELECT_ARTICLES_ORDER = "ORDER BY `no` DESC LIMIT ?, 10";
+													
 	public static final String UPDATE_HIT_COUNT = "UPDATE `Article` SET `hit` = `hit` + 1 WHERE `no`=?";
 	
 	public static final String UPDATE_ARTICLE = "UPDATE `Article` SET "

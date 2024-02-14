@@ -6,11 +6,13 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	String pg = request.getParameter("pg");
+	String searchType = request.getParameter("searchType");
+	String keyword = request.getParameter("keyword");
 	
 	ArticleDAO dao = ArticleDAO.getInstance();
 	
 	// 전체 글 갯수 조회
-	int total = dao.SelectCountTotal();
+	int total = dao.SelectCountTotal(searchType, keyword);
 	
 	// 마지막 페이지 번호 계산
 	int lastPageNum = 0;
@@ -42,18 +44,34 @@
 	// 페이지 시작번호 계산
 	int pageStartNum = total - start;
 	
-	// 글 조회
-	List<ArticleDTO> articles = dao.selectArticles(start);
-%>
+	List<ArticleDTO> articles = null;
+	
+	
+	String params = "";
+	String params2 = "";
+	
+	if((searchType == null || searchType.isEmpty()) && (keyword == null || keyword.isEmpty())){
+		// 글 조회
+		articles = dao.selectArticles(start);
+		params = "pg="+pg;
+	}else{
+		// 검색
+		articles = dao.selectArticlesForSearch(searchType, keyword, start);
+		// 동적 파라미터 생성
+		params = "searchType="+searchType+"&keyword="+keyword+"&pg="+pg;
+		params2 = "searchType="+searchType+"&keyword="+keyword;
+	}
+	
+%>	
 <%@ include file="./_header.jsp" %>
 <script type="text/javascript">
 	window.onload = function(){
 		
 		//const searchForm = document.getElementsByClassName('search')[0];
-		const btnSearch = document.search.submit;
-		btnSearch.onclick = ()=>{
-			alert('검색클릭!');
-		}
+		//const btnSearch = document.search.submit;
+		//btnSearch.onclick = ()=>{
+			//alert('검색클릭!');
+		//}
 	}
 </script>
 	<main>
@@ -61,7 +79,7 @@
 	        <h3>글 목록</h3>
 	        <article>
 	        	<!-- 검색 -->
-	        	<form action="/Jboard1/User/proc/searchProc.jsp" class="search" name="search">
+	        	<form action="/Jboard1/list.jsp" class="search" name="search">
 	        		<select name="searchType">
 	        			<option value="title">제목</option>
 	        			<option value="content">내용</option>
@@ -69,7 +87,7 @@
 	        			<option value="writer">작성자</option>
 	        		</select>
 	        		<input type="text" name="keyword" placeholder="검색 키워드 입력">
-	        		<input type="submit" name="submit" value="검색">
+	        		<input type="submit" value="검색">
 	        	</form>
 	            <table>
 	                <tr>
@@ -82,7 +100,11 @@
 	                <% for (ArticleDTO article : articles) {%>
 					<tr>
 						<td><%= pageStartNum-- %></td>
-						<td><a href="./view.jsp?no=<%= article.getNo()%>"><%= article.getTitle() %></a>&nbsp;[<%= article.getComment()%>]</td>
+						<td>
+							<a href="/Jboard1/view.jsp?no=<%= article.getNo()%>&<%=params%>">
+								<%= article.getTitle() %>
+							</a>&nbsp;[<%= article.getComment()%>]
+						</td>
 						<td><%= article.getNick()%></td>
 						<td><%= article.getRdate().substring(2, 10) %></td>
 						<td><%= article.getHit()%></td>
@@ -93,18 +115,18 @@
 	        <!--페이지 네비게이션-->
 	        <div class="paging">
 	        	<% if(pageGroupStart > 1) { %>
-	            <a href="/Jboard1/list.jsp?pg=<%= pageGroupStart - 1 %>" class="prev">이전</a>
+	            <a href="/Jboard1/list.jsp?pg=<%= pageGroupStart - 1 %>&<%=params2%>" class="prev">이전</a>
 	            <% } %>
 	            
 	            <% for(int n=pageGroupStart ; n <=pageGroupEnd ; n++) {%>
-	            <a href="/Jboard1/list.jsp?pg=<%= n %>" class="num<%=(currentPg == n) ? "_current" : "" %>"><%= n %></a>
+	            <a href="/Jboard1/list.jsp?pg=<%=n%>&<%=params2%>" class="num<%=(currentPg == n) ? "_current" : "" %>"><%= n %></a>
 	            <%} %>
 	            <% if(pageGroupEnd < lastPageNum) { %>
-	            <a href="/Jboard1/list.jsp?pg=<%= pageGroupEnd + 1 %>" class="next">다음</a>
+	            <a href="/Jboard1/list.jsp?pg=<%= pageGroupEnd + 1 %>&<%=params2%>" class="next">다음</a>
 	            <% } %>
 	        </div>
 	        <div>
-	            <a href="/Jboard1/write.jsp" class="btnWrite">글쓰기</a>
+	            <a href="/Jboard1/write.jsp?<%=params%>" class="btnWrite">글쓰기</a>
 	        </div>
 	    </section>
 	</main>

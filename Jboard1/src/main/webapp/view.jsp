@@ -5,6 +5,9 @@
 <%	
 	request.setCharacterEncoding("UTF-8");
 	String no = request.getParameter("no");
+	String pg = request.getParameter("pg");
+	String searchType = request.getParameter("searchType");
+	String keyword = request.getParameter("keyword");
 	
 	ArticleDAO dao = ArticleDAO.getInstance();
 	
@@ -16,6 +19,19 @@
 	
 	// 댓글 조회
 	List<ArticleDTO> comments = dao.selectComments(no);
+	
+	// 동적 파라미터 생성
+	String params = "";
+	String params2 = "";
+	
+	if((searchType == null || searchType.isEmpty()) && (keyword == null || keyword.isEmpty())){
+		params = "pg="+pg;
+	}else{
+		// 동적 파라미터 생성
+		params = "searchType="+searchType+"&keyword="+keyword+"&pg="+pg;
+		params2 = "searchType="+searchType+"&keyword="+keyword;
+	}
+	
 %>
 <%@ include file="./_header.jsp" %>
 <script type="text/javascript">
@@ -134,7 +150,7 @@
 	            <a href="/Jboard1/User/proc/deleteProc.jsp?no=<%= articles.getNo()%>" class="btnDelete">삭제</a>
 	            <a href="./modify.jsp?no=<%= articles.getNo()%>" class="btnModify">수정</a>
 	            <%} %>
-	            <a href="./list.jsp?" class="btnList">목록</a>
+	            <a href="/Jboard1/list.jsp?<%=params%>" class="btnList">목록</a>
 	        </div>
 	
 	        <!--댓글 리스트-->
