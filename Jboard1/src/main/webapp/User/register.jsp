@@ -10,6 +10,7 @@
 	}
 %>
 <%@ include file="./_header.jsp" %>
+<script src="/Jboard1/JS/checkCountUser.js"></script>
 	<main>
 	    <section class="register">
 	        <form action="/Jboard1/User/proc/registerProc.jsp" method="post">
@@ -19,22 +20,22 @@
 	                <tr>
 	                    <td>아이디</td>
 	                    <td>
-	                        <input type="text" name="uid" placeholder="아이디 입력" required>
-	                        <button><img src="../images/chk_id.gif" alt="아이디 중복체크"></button>
-	                        <span class="result_uid"></span>
+	                        <input type="text" id="inputUid" name="uid" placeholder="아이디 입력" required>
+	                        <button id="btnCheckUid"><img src="../images/chk_id.gif" alt="아이디 중복체크"></button>
+	                        <span class="resultuid"></span>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <td>비밀번호</td>
 	                    <td>
-	                        <input type="password" name="pass1" placeholder="비밀번호 입력" required>
+	                        <input type="password" id="pass1" name="pass1" placeholder="비밀번호 입력" required>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <td>비밀번호 확인</td>
 	                    <td>
 	                        <input type="password" name="pass2" placeholder="비밀번호 입력 확인">
-	                        <span class="result_pass"></span>
+	                        <span class="resultPass"></span>
 	                    </td>
 	                </tr>
 	            </table>
@@ -45,26 +46,32 @@
 	                    <td>이름</td>
 	                    <td>
 	                        <input type="text" name="name" placeholder="이름 입력" required>
+	                        <span class="resultName"></span>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <td>별명</td>
 	                    <td>
 	                        <p>공백없이 한글, 영문, 숫자만 입력 가능</p>
-	                        <input type="text" name="nick" placeholder="별명 입력" required>
-	                        <span class="result_nick"></span>
+	                        <input type="text" id="inputNick" name="nick" placeholder="별명 입력" required>
+	                        <button id="btnCheckNick"><img src="../images/chk_id.gif" alt="닉네임 중복체크"></button>
+	                        <span class="resultNick"></span>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <td>Email</td>
 	                    <td>
-	                        <input type="email" name="email" placeholder="이메일 입력" required>
+	                        <input type="email" id="inputEmail" name="email" placeholder="이메일 입력" required>
+	                        <button id="btnCheckEmail"><img src="../images/chk_id.gif" alt="이메일 중복체크"></button>
+	                        <span class="resultEmail"></span>
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <td>휴대폰</td>
 	                    <td>
-	                        <input type="text" name="hp" placeholder="-포합 13자리 입력 입력" required maxlength="13">
+	                        <input type="text" id="inputHp" name="hp" placeholder="-포합 13자리 입력 입력" required maxlength="13">
+	                        <button id="btnCheckHp"><img src="../images/chk_id.gif" alt="휴대폰 중복체크"></button>
+	                        <span class="resultHp"></span>
 	                    </td>
 	                </tr>
 	                <tr>

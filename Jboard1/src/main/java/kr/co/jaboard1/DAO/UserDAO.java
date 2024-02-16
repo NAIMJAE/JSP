@@ -61,6 +61,40 @@ public class UserDAO extends DBHelper {
 	public void deleteUser(String uid) {}
 	
 	// 사용자 CRUD 메서드
+	public int selectCountUser(String type, String value) {
+		
+		//String SQL = sql.SELECT_COUNT_USER;
+		StringBuilder SQL = new StringBuilder(sql.SELECT_COUNT_USER);
+		if(type.equals("uid")) {
+			SQL.append(sql.WHERE_UID);
+		}else if(type.equals("nick")){
+			SQL.append(sql.WHERE_NICK);
+		}else if(type.equals("hp")){
+			SQL.append(sql.WHERE_HP);
+		}else if(type.equals("email")){
+			SQL.append(sql.WHERE_EMAIL);
+		}	
+		
+		int result = 0;
+		
+		try {
+			conn = getConnection();
+			psmt = conn.prepareStatement(SQL.toString());
+			psmt.setString(1, value);
+			rs = psmt.executeQuery();
+			
+			System.out.println(psmt);
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+			CloseAll();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public UserDTO selectUserForLogin(String uid, String pass) {
 		UserDTO user = null;
 		
