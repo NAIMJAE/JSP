@@ -49,7 +49,7 @@ window.onload = function(){
 		const params = '?type=uid&value='+uid;
 		isUidOk = getCheckResult(url+params, resultUid);
 		
-		console.log('isUidOk : ' + isUidOk.);
+		console.log('isUidOk : ' + isUidOk);
 	}
 	// 닉네임 체크
 	btnCheckNick.onclick = function(e) {
