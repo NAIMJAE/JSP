@@ -210,40 +210,5 @@ window.onload = function(){
     // 위에 fetch 끝날때까지 대기
     console.log('result4 : ' + result);
     return result;
-}
-	
-	/*
-	// 공통 fetch 함수
-	function getCheckResult(url, target){
-		
-		let result = false;
-		console.log('result1 : ' + result);
-		
-		fetch(url)
-		.then(response => response.json())
-		.then((data) => {
-			console.log(data);
-			if(data.result > 0) {
-				// 중복되는 데이터 false
-				target.innerText = "이미 사용 중인 "+data.type+"입니다.";
-				target.style.color = 'red';
-				result = false;
-				console.log('result2 : ' + result);
-				
-			} else {
-				// 중복되지 않는 데이터 true
-				target.innerText = "사용 가능한 "+data.type+"입니다.";
-				target.style.color = 'green';
-				result = true;
-				console.log('result3 : ' + result);
-			}
-		})
-		.catch((err) => {console.log("잘못 입력하셨습니다.");})
-		// 위에 fetch 끝날때까지 대기
-		console.log('result4 : ' + result);
-		return result;	
-		
-		// 콘솔에서 순서가 1->2or3->4->isUidOk 로 찍혀야하는데
-	}	
-	 */
+	}
 }
