@@ -6,7 +6,6 @@ import dao.User1DAO;
 import dto.User1DTO;
 
 public class User1Service {
-	
 	// 싱글톤
 	private static User1Service instance = new User1Service();
 	public static User1Service getInstance() {
