@@ -1,0 +1,43 @@
+package kr.co.jboard2.service;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import kr.co.jboard2.DAO.UserDAO;
+import kr.co.jboard2.DTO.UserDTO;
+
+public class UserService {
+	private static UserService instance = new UserService();
+	public static UserService getInstance() {
+		return instance;
+	}
+	private UserService() {}
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private UserDAO dao = UserDAO.getInstance();
+	
+// 사용자 정의 CRUD 메서드
+	// 로그인 확인 메서드	
+	public void insertUser(UserDTO userDTO) {
+		dao.insertUser(userDTO);
+	}
+	public UserDTO selectUser(String uid) {
+		return dao.selectUser(uid);
+	}
+	public List<UserDTO> selectUsers() {
+		return dao.selectUsers();
+	}
+	public void updateUser(UserDTO userDTO) {
+		dao.updateUser(userDTO);
+	}
+	public void deleteUser(String uid) {
+		dao.deleteUser(uid);
+	}
+	
+// 사용자 정의 CRUD 메서드
+	// 로그인 확인 메서드
+	public UserDTO selectUserForLogin(String uid, String pass) {
+		return dao.selectUserForLogin(uid, pass);
+	}
+}
