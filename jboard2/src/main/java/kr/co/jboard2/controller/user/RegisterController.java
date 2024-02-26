@@ -44,6 +44,9 @@ public class RegisterController extends HttpServlet {
 		String nick  = req.getParameter("nick");
 		String email = req.getParameter("email");
 		String hp    = req.getParameter("hp");
+		String zip   = req.getParameter("zip");
+		String addr1 = req.getParameter("addr1");
+		String addr2 = req.getParameter("addr2");
 		String sms   = req.getParameter("sms");
 		String regip = req.getRemoteAddr();
 		
@@ -54,6 +57,9 @@ public class RegisterController extends HttpServlet {
 		user.setNick(nick);
 		user.setEmail(email);
 		user.setHp(hp);
+		user.setZip(zip);
+		user.setAddr1(addr1);
+		user.setAddr2(addr2);
 		user.setSms(sms);
 		user.setRegip(regip);
 		

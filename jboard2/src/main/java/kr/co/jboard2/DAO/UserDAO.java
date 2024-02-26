@@ -31,8 +31,11 @@ public class UserDAO extends DBHelper {
 			psmt.setString(4, userDTO.getNick());
 			psmt.setString(5, userDTO.getEmail());
 			psmt.setString(6, userDTO.getHp());
-			psmt.setString(7, userDTO.getRegip());
-			psmt.setString(8, userDTO.getSms());
+			psmt.setString(7, userDTO.getZip());
+			psmt.setString(8, userDTO.getAddr1());
+			psmt.setString(9, userDTO.getAddr2());
+			psmt.setString(10, userDTO.getRegip());
+			psmt.setString(11, userDTO.getSms());
 			
 			logger.info("psmt : "+psmt);
 			psmt.executeUpdate();
@@ -57,6 +60,37 @@ public class UserDAO extends DBHelper {
 	public void deleteUser(String uid) {}
 	
 // 사용자 정의 CRUD 메서드
+	// 회원가입 중복 검사 메서드
+	public int selectCountUser(String type, String value) {
+		int result = 0;
+		StringBuilder sql = new StringBuilder(SQL.SELECT_COUNT_USER);
+		if(type.equals("uid")) {
+			sql.append(SQL.WHERE_UID);
+		}else if(type.equals("nick")) {
+			sql.append(SQL.WHERE_NICK);
+		}else if(type.equals("hp")) {
+			sql.append(SQL.WHERE_HP);
+		}else if(type.equals("email")) {
+			sql.append(SQL.WHERE_EMAIL);
+		}
+		try {
+			conn = getConnection();
+			psmt = conn.prepareStatement(sql.toString());
+			psmt.setString(1, value);
+
+			logger.info("psmt : " + psmt);
+			
+			rs = psmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+			CloseAll();
+		} catch (Exception e) {
+			logger.error("selectCountUser" + e.getMessage());
+		}
+		return result;
+	}	
+	
 	// 로그인 확인 메서드
 	public UserDTO selectUserForLogin(String uid, String pass) {
 		UserDTO users = new UserDTO();

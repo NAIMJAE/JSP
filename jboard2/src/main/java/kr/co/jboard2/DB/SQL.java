@@ -11,6 +11,9 @@ public class SQL {
 											+ "`nick`=?, "
 											+ "`email`=?, "
 											+ "`hp`=?, "
+											+ "`zip`=?, "
+											+ "`addr1`=?, "
+											+ "`addr2`=?, "
 											+ "`regip`=?, "
 											+ "`sms`=?, "
 											+ "`rdate`=NOW()";
