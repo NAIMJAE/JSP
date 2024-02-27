@@ -3,20 +3,29 @@
         <main id="board">
             <section class="view">
                 
-                <table border="0">
+                <table>
                     <caption>글보기</caption>
                     <tr>
                         <th>제목</th>
-                        <td><input type="text" name="title" value="제목입니다." readonly/></td>
+                        <td><input type="text" name="title" value="${article.getTitle()}" readonly/></td>
                     </tr>
                     <tr>
                         <th>파일</th>
-                        <td><a href="#">2020년 상반기 매출자료.xls</a>&nbsp;<span>7</span>회 다운로드</td>
+                        
+                        <c:choose>
+                        	<c:when test="${file != null}">
+                        		<td><a href="#">${file.getoName()}</a>&nbsp;<span>${file.getDownload()}</span>회 다운로드</td>
+                        	</c:when>
+                        	<c:otherwise>
+                        		<td><a href="#"></a>&nbsp;<span></span>첨부파일 없음</td>
+                        	</c:otherwise>
+                        </c:choose>
+                        
                     </tr>
                     <tr>
                         <th>내용</th>
                         <td>
-                            <textarea name="content" readonly>내용 샘플입니다.</textarea>
+                            <textarea name="content" readonly>${article.getContent()}</textarea>
                         </td>
                     </tr>                    
                 </table>

@@ -1,9 +1,45 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="./_header.jsp" %>
+<script>
+	window.onload = function(){
+		
+		const form = document.formLogin;
+		const btnLogin = document.getElementsByClassName('btnLogin')[0];
+		
+		btnLogin.onclick = function(e){
+			e.preventDefault();
+			
+			const uid = form.uid.value;
+			const pass = form.pass.value;
+			
+			if(uid == "" || pass == "") {
+				alert('아이디 / 비밀번호를 입력해주세요.');
+				return;
+			}
+
+			fetch('/jboard2/user/loginCheck.do', {
+				method: 'POST',
+				body: JSON.stringify({"uid": uid, "pass": pass})
+			})
+			.then((response)=>response.json())
+			.then((data)=>{
+				if(data.check > 0) {
+					form.submit();
+				}else{
+					alert('회원정보가 일치하지 않습니다.');
+				}
+			})
+			.catch((err)=>{
+				console.log(err);
+			});
+		}
+	}
+
+</script>
         <main id="user">
             <section class="login">
-                <form action="/jboard2/user/login.do" method="post">
-                    <table border="0">
+                <form action="/jboard2/user/login.do" name="formLogin" method="post">
+                    <table>
                         <tr>
                             <td><img src="../img/login_ico_id.png" alt="아이디"/></td>
                             <td><input type="text" name="uid" placeholder="아이디 입력"/></td>
@@ -14,7 +50,6 @@
                         </tr>
                     </table>
                     <input type="submit" value="로그인" class="btnLogin"/>
-                    
                 </form>
                 <div>
                     <h3>회원 로그인 안내</h3>

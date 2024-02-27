@@ -3,8 +3,9 @@
         <main id="board">
             <section class="write">
 
-                <form action="#">
-                    <table border="0">
+                <form action="/jboard2/write.do" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="writer" value="${sessionScope.sessuser.uid}"/>
+                    <table>
                         <caption>글쓰기</caption>
                         <tr>
                             <th>제목</th>
@@ -19,13 +20,13 @@
                         <tr>
                             <th>파일</th>
                             <td>
-                                <input type="file" name="file"/>
+                                <input type="file" name="fname1" multiple="multiple" maxlength="2"/>
                             </td>
                         </tr>
                     </table>
                     
                     <div>
-                        <a href="./list.html" class="btn btnCancel">취소</a>
+                        <a href="/jboard2/list.do" class="btn btnCancel">취소</a>
                         <input type="submit" value="작성완료" class="btn btnComplete"/>
                     </div>
                 </form>

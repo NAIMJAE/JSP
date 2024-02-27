@@ -11,10 +11,10 @@
         <header>
             <h3>Board System v2.0</h3>
             <c:choose>
-                <c:when test="${not empty sessionScope.user}">
+                <c:when test="${not empty sessionScope.sessuser}">
                     <p>
-                        <span>${sessionScope.user.name}</span>님 반갑습니다.
-                        <a href="#">[로그아웃]</a>
+                        <span>${sessionScope.sessuser.nick}</span>님 반갑습니다.
+                        <a href="/jboard2/user/logout.do">[로그아웃]</a>
                     </p>
                 </c:when>
                 <c:otherwise>

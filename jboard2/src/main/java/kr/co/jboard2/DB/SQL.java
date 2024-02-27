@@ -32,6 +32,7 @@ public class SQL {
 												+ "`content`=?, "
 												+ "`writer`=?, "
 												+ "`regip`=?, "
+												+ "`file`=?, "
 												+ "`rdate`=NOW()";
 	
 	public static final String INSERT_COMMENT = "INSERT INTO `Article` SET "
@@ -41,7 +42,16 @@ public class SQL {
 												+ "`regip`=?, "
 												+ "`rdate`=NOW()";
 	
+	public static final String INSERT_FILE = "INSERT INTO `file` SET "
+												+ "`ano`=?, "
+												+ "`oName`=?, "
+												+ "`sName`=?, "
+												+ "`rdate`=NOW()";
+	
 	public static final String SELECT_ARTICLE = "SELECT * FROM `Article` WHERE `no`=?";
+	
+	public static final String SELECT_FILE = "SELECT * FROM `File` "
+											+ "WHERE `aNo`=?";
 
 	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `Article` AS a "
 												+ "JOIN `User` AS b ON a.writer = b.uid "

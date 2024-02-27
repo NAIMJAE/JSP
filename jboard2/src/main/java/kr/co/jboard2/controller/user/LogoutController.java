@@ -16,39 +16,32 @@ import org.slf4j.LoggerFactory;
 import kr.co.jboard2.DTO.UserDTO;
 import kr.co.jboard2.service.UserService;
 
-@WebServlet("/user/login.do")
-public class LoginController extends HttpServlet {
+@WebServlet("/user/logout.do")
+public class LogoutController extends HttpServlet {
 	private static final long serialVersionUID = 14351362345L;
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private UserService service = UserService.getInstance();
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	UserService service = UserService.getInstance();
 	@Override
 	public void init() throws ServletException {
 
 	}
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		logger.info("loginController - doGet");
+		logger.info("logoutController - doGet");
+		
+		HttpSession session = req.getSession();
+		//현재 사용자 객체 세션 제거
+		session.removeAttribute("sessuser");
+		// 현재 세션 해제
+		session.invalidate();
 
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/user/login.jsp");
-		dispatcher.forward(req, resp);
+		// 로그인으로 이동
+		resp.sendRedirect("/jboard2/user/login.do");
+		
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		logger.info("loginController - doPos");
-		
-		String uid = req.getParameter("uid");
-		String pass = req.getParameter("pass");
-		
-		UserDTO user = service.selectUserForLogin(uid, pass);
-		logger.info("log"+user);
-		
-		if(user.getUid() == null) {
-			resp.sendRedirect("/jboard2/user/login.do");
-		}else {
-			HttpSession session = req.getSession();
-			session.setAttribute("sessuser", user);
-			
-			resp.sendRedirect("/jboard2/list.do");
+		logger.info("logoutController - doPost");
+
 		}
-	}
 }

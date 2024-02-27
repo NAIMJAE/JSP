@@ -29,7 +29,7 @@ public class UserService {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private UserDAO dao = UserDAO.getInstance();
 	
-// 사용자 정의 CRUD 메서드
+// 기본 CRUD 메서드
 	// 로그인 확인 메서드	
 	public void insertUser(UserDTO userDTO) {
 		dao.insertUser(userDTO);
