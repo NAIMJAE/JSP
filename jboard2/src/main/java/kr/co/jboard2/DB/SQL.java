@@ -56,6 +56,8 @@ public class SQL {
 	
 	public static final String SELECT_FILE = "SELECT * FROM `File` "
 											+ "WHERE `fNo`=?";
+	
+	public static final String SELECT_FILES = "SELECT * FROM `File` WHERE `ano`=? ";
 
 	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `Article` AS a "
 												+ "JOIN `User` AS b ON a.writer = b.uid "
@@ -103,6 +105,8 @@ public class SQL {
 	public static final String DELETE_COMMENTS = "DELETE FROM `Article` WHERE `parent`=?";
 	
 	public static final String DELETE_FILE = "DELETE FROM `File` WHERE `fno`=? ";
+	
+	public static final String DELETE_FILE_ALL = "DELETE FROM `File` WHERE `ano`=?";
 
 	
 	

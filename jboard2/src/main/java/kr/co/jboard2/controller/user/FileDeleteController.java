@@ -48,16 +48,14 @@ public class FileDeleteController extends HttpServlet{
 		FileDTO file = fileService.selectFile(fno);
 		
 		if (file != null) {
-			// file 테이블의 데이터 삭제 (fno 필요)
-			// 게시글의 file 갯수 -1 (ano 필요)
+			// file 테이블의 데이터 삭제 (fno 필요), 게시글의 file 갯수 -1 (ano 필요)
 			success = fileService.deleteFile(fno, file.getAno());
-			
-			logger.info("getsName() : " + file.getsName());
 			
 			// uploads에 업로드된 file 삭제 (sName 필요)
 			ServletContext ctx = getServletContext();
 			fileService.deleteUploadFile(ctx, file.getsName());
 		}else {
+			success = 0;
 			return;
 		}
 		

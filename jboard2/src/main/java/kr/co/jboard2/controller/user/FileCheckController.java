@@ -1,46 +1,53 @@
-package kr.co.jboard2.controller;
+package kr.co.jboard2.controller.user;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.JsonObject;
+
 import kr.co.jboard2.DTO.FileDTO;
-import kr.co.jboard2.service.ArticleService;
 import kr.co.jboard2.service.FileService;
+@WebServlet("/fileCheck.do")
+public class FileCheckController extends HttpServlet{
 
-@WebServlet("/fileDownload.do")
-public class FileDownloadController extends HttpServlet {
-	private static final long serialVersionUID = 3454011666393788527L;
-
+	private static final long serialVersionUID = 125164353451L;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private FileService service = FileService.getInstance();
-	private ArticleService articleService = ArticleService.getInstance();
 	
 	@Override
 	public void init() throws ServletException {
+
 	}
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		logger.info("FileCheck - doGet");
 		
-		// 파일번호 수신
-		String fno = req.getParameter("fno");
+		String fno = req.getParameter("no");
+		int result = 0;
 		
-		// 파일 조회
-		FileDTO fileDTO = service.selectFileCheck(fno);
-		
-		// 파일 다운로드
-		articleService.fileDownload(req, resp, fileDTO);
+		FileDTO file = service.selectFile(fno);
+		if(file != null) {
+			result = 1;
+		}
+		// JSON 출력
+		JsonObject json = new JsonObject();
+		json.addProperty("result", result);
+		PrintWriter writer = resp.getWriter();
+		writer.print(json);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		logger.info("FileCheck - doPost");
+		
 	}
 }

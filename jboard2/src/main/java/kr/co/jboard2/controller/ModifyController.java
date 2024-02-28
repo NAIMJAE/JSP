@@ -57,8 +57,9 @@ public class ModifyController extends HttpServlet{
 		articleDTO.setNo(no);
 		
 		// 현재 게시글의 file 개수 조회
-		int file = articleService.selectArticleFile(no);
-		articleDTO.setFile(file);
+		int nowFile = articleService.selectArticleFile(no);
+		int newFile = articleDTO.getFile() + nowFile;
+		articleDTO.setFile(newFile);
 		
 		logger.info("articleDTO : " + articleDTO);
 		

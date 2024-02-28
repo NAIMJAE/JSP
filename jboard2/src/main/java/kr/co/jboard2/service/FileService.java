@@ -26,8 +26,8 @@ public class FileService {
 		return dao.selectFile(fno);
 	} 
 	
-	public List<FileDTO> selectFiles() {
-		return dao.selectFiles();
+	public List<FileDTO> selectFiles(String no) {
+		return dao.selectFiles(no);
 	}
 	
 	public void updateFile(FileDTO fileDTO) {
@@ -39,6 +39,7 @@ public class FileService {
 	}
 	
 // 사용자 정의 CRUD 메서드
+	// uploads에 저장된 파일 삭제
 	public void deleteUploadFile(ServletContext ctx, String sName) {
         // 파일 디렉토리 경로 설정 (서버에서 구동되는 경로)
         String uploadPath = ctx.getRealPath("/uploads");
@@ -55,4 +56,16 @@ public class FileService {
             System.out.println("파일이 존재하지 않습니다.");
         }
     }
+	// 파일 테이블 조회 & 다운로드 카운팅
+	public FileDTO selectFileCheck(String fno) {
+		return dao.selectFileCheck(fno);
+	}
+	// 게시글 삭제시 uploads에 저장된 파일 전부 삭제
+	public void deleteUploadFileAll(String no) {
+		
+	}
+	// 게시글 삭제시 file 테이블에 있는 데이터 전부 삭제
+	public void deleteFileAll(String no) {
+		dao.deleteFileAll(no);
+	}
 }

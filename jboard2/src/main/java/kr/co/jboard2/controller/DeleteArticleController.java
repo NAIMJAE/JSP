@@ -1,7 +1,9 @@
 package kr.co.jboard2.controller;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,13 +17,12 @@ import kr.co.jboard2.DTO.FileDTO;
 import kr.co.jboard2.service.ArticleService;
 import kr.co.jboard2.service.FileService;
 
-@WebServlet("/fileDownload.do")
-public class FileDownloadController extends HttpServlet {
-	private static final long serialVersionUID = 3454011666393788527L;
-
+@WebServlet("/deleteArticle.do")
+public class DeleteArticleController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private FileService service = FileService.getInstance();
 	private ArticleService articleService = ArticleService.getInstance();
+	private FileService fileService = FileService.getInstance();
 	
 	@Override
 	public void init() throws ServletException {
@@ -29,18 +30,31 @@ public class FileDownloadController extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		logger.info("deleteArticleController - doGet");
 		
-		// 파일번호 수신
-		String fno = req.getParameter("fno");
+		String no = req.getParameter("no");
+		// 게시글 번호 no -> 게시글, file테이블, upload 폴더 삭제
 		
-		// 파일 조회
-		FileDTO fileDTO = service.selectFileCheck(fno);
+		// file 조회
+		List<FileDTO> fileDTO = fileService.selectFiles(no);
 		
-		// 파일 다운로드
-		articleService.fileDownload(req, resp, fileDTO);
+		// upload 폴더내 파일 삭제 (sName 필요)
+		ServletContext ctx = getServletContext();
+		for (FileDTO file : fileDTO) {
+			logger.info(file.getsName());
+		    fileService.deleteUploadFile(ctx, file.getsName());
+		}
+		// 파일 삭제 (순서!!!!!)
+		fileService.deleteFileAll(no);
+		
+		// 게시글 삭제
+		articleService.deleteArticle(no);
+		
+		resp.sendRedirect("/jboard2/list.do");
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
 	}
 }

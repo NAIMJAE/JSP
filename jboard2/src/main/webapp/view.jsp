@@ -7,17 +7,12 @@
 		btnRemove.onclick = function(e){
 			e.preventDefault();
 			
-			let check = confrim('정말 삭제하시겠습니까?');
+			let check = confirm('정말 삭제하시겠습니까?');
 			
-			// 게시글 번호 no -> 게시글, file테이블, upload 폴더 삭제
 			if(check){
-				fetch("/jboard2/deleteArticle.do")
-				.then((rsponse)=>rsponse.json())
-				.then((data)=>{
-					// 제대로 삭제되었는지 data로 확인하고 
-					// 여기서 삭제되었습니다 띄우고 list로 이동
-				})
-				.catch((err)=>console.log(err))				
+				let link = this.getAttribute('href');
+	            window.location.href = link;
+	            alert('게시글이 삭제되었습니다.');
 			}
 		}
 	}
@@ -56,7 +51,7 @@
                 
                 <div>
                 	<c:if test="${articleDTO.writer == sessUser.uid}">
-	                    <a href="/jboard2/delete.do?no=${articleDTO.no}" class="btn btnRemove">삭제</a>
+	                    <a href="/jboard2/deleteArticle.do?no=${articleDTO.no}" class="btn btnRemove">삭제</a>
 	                    <a href="/jboard2/modify.do?no=${articleDTO.no}" class="btn btnModify">수정</a>
                     </c:if>
                     <a href="/jboard2/list.do" class="btn btnList">목록</a>

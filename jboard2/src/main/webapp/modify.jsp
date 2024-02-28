@@ -2,47 +2,82 @@
 <%@ include file="./_header.jsp" %>
 <script>
 	window.onload = function() {
-	// btnFileDelete 버튼 클릭시 
+	
 		const btnFileDeletes = document.getElementsByClassName('btnFileDelete');
+		const btnComplete = document.getElementsByClassName('btnComplete')[0];
+		const form = document.getElementById('form'); 
+		let deleteList = [];
 		
+	// btnFileDelete 버튼 클릭시 
 		Array.from(btnFileDeletes).forEach(btnFileDelete => {
 		    btnFileDelete.onclick = function(e) {
-		        e.preventDefault();
-		        
-		        let check = confirm('선택한 첨부파일을 삭제하시겠습니까?');
+		    	e.preventDefault();
+		    	let check = confirm('선택한 첨부파일을 삭제하시겠습니까?');
 		        var parent = this.parentNode;
 		        var fno = this.dataset.fno;
-		        console.log(fno);
+		        
 		        if(check) {
-		            fetch("/jboard2/fileDelete.do?no="+fno)
+		        	fetch("/jboard2/fileCheck.do?no=" + fno)
 		            .then((response)=>response.json())
 		            .then((data)=>{
-		                if(data.success > 0){
-		                    console.log(data.success);
-		                    parent.remove();
+		            	if(data.result > 0){
+		            		deleteList.push(fno);
+		            		parent.remove();
 		                    alert('첨부파일이 삭제되었습니다.');
-		                }else{
-		                    alert('해당파일을 찾을 수 없습니다.');
-		                }
+		            	}else{
+		            		alert('해당파일을 찾을 수 없습니다.');
+		            	}
 		            })
 		            .catch((err)=>{
 		                console.log(err);
 		            });
 		        }
-		    }
+			}
 		});
+	// btnComplete 버튼 클릭시
+		btnComplete.onclick = function(e) {
+		    e.preventDefault();
+		    let check = confirm('수정 사항을 저장하시겠습니까?');
+		
+		    if (check) {
+		    	// 첨부파일 삭제가 있는 경우
+		    	if(deleteList != null && deleteList.length > 0){
+		    		deleteList.forEach(fno => {
+			            fetch("/jboard2/fileDelete.do?no=" + fno)
+		                .then((response) => response.json())
+		                .then((data) => {
+		                    if (data.success > 0) {
+		                        console.log(data.success);
+		                        alert('게시글이 수정되었습니다.');
+		                        form.submit();
+		                    } else {
+		                        alert('첨부파일을 확인해주세요.');
+		                        return;
+		                    }
+		                })
+		                .catch((err) => {
+		                    console.log(err);
+		                });
+			        });
+		    	}else{
+		    		alert('게시글이 수정되었습니다.');
+                    form.submit();
+		    	}
+		    }
+		}
+	}// window.onload 끝
 	// - 정말 삭제하시겠습니까 물어보기
 	// - fetch 이용해서 deleteFile 수행하기 (fno값으로 delete)
 	// - 파일 삭제하면서 업로드된 파일도 삭제 
 	// - 파일 삭제하면서 게시글에 있는 file 갯수도 감소 시키기 (no값으로 update)
 	// - 파일 td도 지우기
 	// - 삭제 완료되면 정상적으로 삭제되었습니다 메세지 띄우기		
-	}
+	
 </script>
         <main id="board">
             <section class="modify">
 
-                <form action="/jboard2/modify.do?no=${article.no}" method="post" enctype="multipart/form-data">
+                <form action="/jboard2/modify.do?no=${article.no}" method="post" id="form" enctype="multipart/form-data">
                     <input type="hidden" name="writer" value="${sessionScope.sessUser.uid}"/>
                     <table>
                         <caption>글수정</caption>

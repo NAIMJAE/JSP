@@ -112,6 +112,7 @@ public class ArticleDAO extends DBHelper{
 			conn = getConnection();
 			psmt = conn.prepareStatement(sql.toString());
 			psmt.setInt(1, start);
+			logger.info("selectArticles : " + psmt);
 			rs = psmt.executeQuery();
 			
 			while(rs.next()) {
@@ -150,7 +151,7 @@ public class ArticleDAO extends DBHelper{
 			psmt.setInt(3, articleDTO.getFile());
 			psmt.setInt(4, articleDTO.getNo());
 			
-			logger.info("psmt : " + psmt);
+			logger.info("updateArticle : " + psmt);
 			
 			// insert 실행
 			psmt.executeUpdate();
@@ -168,8 +169,17 @@ public class ArticleDAO extends DBHelper{
 		return pk;
 	}
 
-	public void deleteArticle(int no) {
-		
+	public void deleteArticle(String no) {
+		try {
+			conn = getConnection();
+			psmt = conn.prepareStatement(SQL.DELETE_ARTICLE);
+			psmt.setString(1, no);
+			logger.info("deleteArticle : "+psmt);
+			psmt.executeUpdate();
+			CloseAll();
+		} catch (Exception e) {
+			logger.error("deleteArticle" + e.getMessage());
+		}
 	}
 	
 // 사용자 정의 CRUD 메서드
@@ -180,7 +190,7 @@ public class ArticleDAO extends DBHelper{
 			conn = getConnection();
 			psmt = conn.prepareStatement(SQL.SELECT_COUNT_TOTAL);
 			rs = psmt.executeQuery();
-			
+			logger.info("selectCountTotal" + psmt);
 			if(rs.next()) {
 				total = rs.getInt(1);
 			}
@@ -199,7 +209,7 @@ public class ArticleDAO extends DBHelper{
 			conn = getConnection();
 			psmt = conn.prepareStatement(SQL.SELECT_ARTICLE_FILE);
 			psmt.setInt(1, no);
-			
+			logger.info("selectArticleFile" + psmt);
 			rs = psmt.executeQuery();
 			if(rs.next()) {
 				file = rs.getInt(1);

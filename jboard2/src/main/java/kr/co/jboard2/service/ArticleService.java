@@ -47,7 +47,7 @@ public class ArticleService {
 	public int updateArticle(ArticleDTO articleDTO) {
 		return dao.updateArticle(articleDTO);
 	}
-	public void deleteArticle(int no) {
+	public void deleteArticle(String no) {
 		dao.deleteArticle(no);
 	}
 	
