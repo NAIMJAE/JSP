@@ -172,7 +172,6 @@ public class ArticleDAO extends DBHelper {
 					SQL.append(sql.SELECT_ARTICLES_WHERE_WRITER);
 				}
 			}
-			
 			try {
 				conn = getConnection();
 				psmt = conn.prepareStatement(SQL.toString());

@@ -45,11 +45,20 @@ window.onload = function(){
 			return;
 		}
 		
-		// 입력한 아이디 가져오기
-		const params = '?type=uid&value='+uid;
-		isUidOk = getCheckResult(url+params, resultUid);
+		console.log('isUidOk1 : ' + isUidOk);
 		
-		console.log('isUidOk : ' + isUidOk);
+		// 서버 전송
+		const params = '?type=uid&value='+uid;
+		getCheckResult(url+params, resultUid)
+			.then((result)=>{				
+				console.log('result : ' + result);
+				isUidOk = true;
+			})
+			.catch((err)=>{
+				console.error('err : ', err);
+			});
+		
+		console.log('isUidOk2 : ' + isUidOk);
 	}
 	// 닉네임 체크
 	btnCheckNick.onclick = function(e) {
@@ -177,38 +186,36 @@ window.onload = function(){
 		}
 	}
 	
-	// 공통 fetch 함수
+	// 공통 커스텀 fetch 함수
 	async function getCheckResult(url, target) {
-    let result = false;
-    console.log('result1 : ' + result);
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        console.log(data);
-        if (data.result > 0) {
-            // 중복되는 데이터 false
-            target.innerText = "이미 사용 중인 " + data.type + "입니다.";
-            target.style.color = 'red';
-            result = false;
-            console.log('result2 : ' + result);
-        } else {
-            // 중복되지 않는 데이터 true
-            target.innerText = "사용 가능한 " + data.type + "입니다.";
-            target.style.color = 'green';
-            result = true;
-            console.log('result3 : ' + result);
-        }
-    } catch (err) {
-        console.error("오류 발생:", err);
-        target.innerText = "서버와의 통신 중 오류가 발생했습니다.";
-        target.style.color = 'red';
-        result = false;
-    }
-    
-    // 위에 fetch 끝날때까지 대기
-    console.log('result4 : ' + result);
-    return result;
+		
+		let result = false;
+		console.log('result1 : ' + result);
+		
+		try {
+			const response = await fetch(url);
+			const data = await response.json();
+			
+			if(response.ok){
+				
+				if(data.result > 0){
+					target.innerText = '이미 사용 중인 ' + data.type + ' 입니다.';
+					target.style.color = 'red';
+					result = false;
+					console.log('result2 : ' + result);
+				}else {
+					target.innerText = '사용 가능한 ' + data.type + ' 입니다.';
+					target.style.color = 'green';
+					result = true;
+					console.log('result3 : ' + result);
+				}
+				
+				console.log('result4 : ' + result);
+				return result;
+			}
+			
+		}catch(err){
+			throw err;
+		}
 	}
 }
