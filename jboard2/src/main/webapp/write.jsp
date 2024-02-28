@@ -4,7 +4,7 @@
             <section class="write">
 
                 <form action="/jboard2/write.do" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="writer" value="${sessionScope.sessuser.uid}"/>
+                <input type="hidden" name="writer" value="${sessionScope.sessUser.uid}"/>
                     <table>
                         <caption>글쓰기</caption>
                         <tr>

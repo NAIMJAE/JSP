@@ -2,7 +2,6 @@ package kr.co.jboard2.controller;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,39 +11,36 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kr.co.jboard2.DTO.ArticleDTO;
+import kr.co.jboard2.DTO.FileDTO;
 import kr.co.jboard2.service.ArticleService;
+import kr.co.jboard2.service.FileService;
 
-@WebServlet("/view.do")
-public class ViewController extends HttpServlet{
-	private static final long serialVersionUID = -4302286311604205457L;
+@WebServlet("/fileDownload.do")
+public class FileDownloadController extends HttpServlet {
+	private static final long serialVersionUID = 3454011666393788527L;
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private ArticleService service = ArticleService.getInstance();
+	private FileService service = FileService.getInstance();
+	private ArticleService articleService = ArticleService.getInstance();
 	
 	@Override
 	public void init() throws ServletException {
-		
 	}
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		logger.info("ViewController - doGet");
-		String no = req.getParameter("no");
 		
-		// 글 조회
-		ArticleDTO articleDTO = service.selectArticle(no);
-		logger.debug(""+articleDTO);
-
-		// view 참조 공유
-		req.setAttribute("articleDTO", articleDTO);
+		// 파일번호 수신
+		String fno = req.getParameter("fno");
 		
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/view.jsp");
-		dispatcher.forward(req, resp);
+		// 파일 조회
+		FileDTO fileDTO = service.selectFile(fno);
+		
+		// 파일 다운로드
+		articleService.fileDownload(req, resp, fileDTO);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	
 	}
 }

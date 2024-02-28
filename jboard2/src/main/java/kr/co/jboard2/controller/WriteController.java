@@ -17,7 +17,6 @@ import kr.co.jboard2.DTO.ArticleDTO;
 import kr.co.jboard2.DTO.FileDTO;
 import kr.co.jboard2.service.ArticleService;
 import kr.co.jboard2.service.FileService;
-import kr.co.jboard2.service.UserService;
 
 @WebServlet("/write.do")
 public class WriteController extends HttpServlet{

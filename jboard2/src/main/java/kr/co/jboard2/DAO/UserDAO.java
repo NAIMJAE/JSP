@@ -1,6 +1,5 @@
 package kr.co.jboard2.DAO;
 
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 

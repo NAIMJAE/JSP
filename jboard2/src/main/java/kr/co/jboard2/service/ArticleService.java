@@ -1,12 +1,17 @@
 package kr.co.jboard2.service;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -32,14 +37,15 @@ public class ArticleService {
 	public int insertArticle(ArticleDTO articleDTO) {
 		return dao.insertArticle(articleDTO);
 	}
-	public ArticleDTO selectArticle(int no) {
+	public ArticleDTO selectArticle(String no) {
 		return dao.selectArticle(no);
 	}
 	public List<ArticleDTO> selectArticles(int start) {
 		return dao.selectArticles(start);
 	}
-	public void updateArticle(ArticleDTO articleDTO) {
-		dao.updateArticle(articleDTO);
+	
+	public int updateArticle(ArticleDTO articleDTO) {
+		return dao.updateArticle(articleDTO);
 	}
 	public void deleteArticle(int no) {
 		dao.deleteArticle(no);
@@ -95,6 +101,8 @@ public class ArticleService {
 						articleDTO.setContent(fieldValue);
 					}else if(fieldName.equals("writer")) {
 						articleDTO.setWriter(fieldValue);
+					}else if(fieldName.equals("no")) {
+						articleDTO.setNo(count);
 					}
 				}
 			}
@@ -112,9 +120,47 @@ public class ArticleService {
 		
 	}
 	
-// 사용자 정의 CRUD 메서드
+public void fileDownload(HttpServletRequest req, HttpServletResponse resp, FileDTO fileDTO) {
+		
+		try {
+			// response 헤더 설정
+			resp.setContentType("application/octet-stream");
+			resp.setHeader("Content-Disposition", "attachment; filename="+URLEncoder.encode(fileDTO.getoName(), "utf-8"));
+			resp.setHeader("Content-Transfer-Encoding", "binary");
+			resp.setHeader("Pragma", "no-cache");
+			resp.setHeader("Cache-Control", "private");
+			
+			// response 파일 스트림 작업
+			ServletContext ctx = req.getServletContext();
+			String uploadsPath = ctx.getRealPath("/uploads");
+			
+			File file = new File(uploadsPath + File.separator + fileDTO.getsName());
+			
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+			BufferedOutputStream bos = new BufferedOutputStream(resp.getOutputStream());
+			
+			while(true){
+				int data = bis.read();
+				if(data == -1){
+					break;
+				}
+				bos.write(data);
+			}
+			
+			bos.close();
+			bis.close();
+			
+		}catch (Exception e) {
+			logger.error("fileDownload : " + e.getMessage());
+		}
+	}
+	
 	// 전체 게시글 수 조회
 		public int selectCountTotal() {
 			return dao.selectCountTotal();
 		}
+	// file 갯수 조회
+	public int selectArticleFile(int no) {
+		return dao.selectArticleFile(no);
+	}
 }

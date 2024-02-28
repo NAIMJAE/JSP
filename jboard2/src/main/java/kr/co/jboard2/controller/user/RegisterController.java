@@ -8,13 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kr.co.jboard2.DTO.UserDTO;
-import kr.co.jboard2.service.TermsService;
 import kr.co.jboard2.service.UserService;
 
 @WebServlet("/user/register.do")

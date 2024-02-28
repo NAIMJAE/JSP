@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import kr.co.jboard2.DB.DBHelper;
 import kr.co.jboard2.DB.SQL;
-import kr.co.jboard2.DTO.ArticleDTO;
 import kr.co.jboard2.DTO.FileDTO;
 
 public class FileDAO extends DBHelper{
@@ -33,31 +32,40 @@ public class FileDAO extends DBHelper{
 	}
 	
 	// 파일 조회 (view.do)
-	public FileDTO selectFile(int ano) {
-		FileDTO file = null;
-		try {
-			conn = getConnection();
-			psmt = conn.prepareStatement(SQL.SELECT_FILE);
-			psmt.setInt(1, ano);
+	public FileDTO selectFile(String fno) {
 			
-			logger.info(""+psmt);
-			rs = psmt.executeQuery();
-			
-			if(rs.next()) {
-				file = new FileDTO();
-				file.setFno(rs.getInt(1));
-				file.setAno(rs.getInt(2));
-				file.setoName(rs.getString(3));
-				file.setsName(rs.getString(4));
-				file.setDownload(rs.getInt(5));
-				file.setRdate(rs.getString(6));
+			FileDTO fileDTO = null;
+			try {
+				conn = getConnection();
+				conn.setAutoCommit(false);
+				
+				psmt = conn.prepareStatement(SQL.SELECT_FILE);
+				psmt.setString(1, fno);
+				logger.info("selectFile : " + psmt);
+				
+				psmtEtc1 = conn.prepareStatement(SQL.UPDATE_FILE_DOWNLOAD);
+				psmtEtc1.setString(1, fno);
+				
+				rs = psmt.executeQuery();
+				psmtEtc1.executeUpdate();
+				
+				conn.commit();
+				
+				if(rs.next()) {
+					fileDTO = new FileDTO();
+					fileDTO.setFno(rs.getInt(1));
+					fileDTO.setAno(rs.getInt(2));
+					fileDTO.setoName(rs.getString(3));
+					fileDTO.setsName(rs.getString(4));
+					fileDTO.setDownload(rs.getInt(5));
+					fileDTO.setRdate(rs.getString(6));
+				}
+				CloseAll();
+			}catch (Exception e) {
+				logger.error("selectFile : " + e.getMessage());
 			}
-			CloseAll();
-		} catch (Exception e) {
-			logger.error("selectArticle"+e.getMessage());
-		}
-		return file;
-	}
+			return fileDTO;
+		} 
 	
 	public List<FileDTO> selectFiles() {
 		return null;
@@ -67,8 +75,31 @@ public class FileDAO extends DBHelper{
 		
 	}
 
-	public void deleteFile(int fno) {
+	public int deleteFile(String fno, int ano) {
+		int success = 0;
 		
+		try {
+			conn = getConnection();
+			conn.setAutoCommit(false);
+			
+			psmt = conn.prepareStatement(SQL.DELETE_FILE);
+			psmt.setString(1, fno);
+			
+			psmtEtc1 = conn.prepareStatement(SQL.UPDATE_FILE_COUNT);
+			psmtEtc1.setInt(1, ano);
+			
+			logger.info("psmt : " + psmt);
+			logger.info("psmtEtc1 : " + psmtEtc1);
+			
+			success = psmt.executeUpdate();
+			psmtEtc1.executeUpdate();
+			
+			conn.commit();
+			CloseAll();
+		} catch (Exception e) {
+			logger.error("deleteFile"+e.getMessage());
+		}
+		return success;
 	}
 	
 // 사용자 정의 CRUD 메서드

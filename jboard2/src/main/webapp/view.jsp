@@ -1,5 +1,27 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="./_header.jsp" %>
+<script>
+	window.onload = function(e) {
+		const btnRemove = document.getElementsByClassName('btnRemove')[0];
+		
+		btnRemove.onclick = function(e){
+			e.preventDefault();
+			
+			let check = confrim('정말 삭제하시겠습니까?');
+			
+			// 게시글 번호 no -> 게시글, file테이블, upload 폴더 삭제
+			if(check){
+				fetch("/jboard2/deleteArticle.do")
+				.then((rsponse)=>rsponse.json())
+				.then((data)=>{
+					// 제대로 삭제되었는지 data로 확인하고 
+					// 여기서 삭제되었습니다 띄우고 list로 이동
+				})
+				.catch((err)=>console.log(err))				
+			}
+		}
+	}
+</script>
         <main id="board">
             <section class="view">
                 
@@ -7,33 +29,37 @@
                     <caption>글보기</caption>
                     <tr>
                         <th>제목</th>
-                        <td><input type="text" name="title" value="${article.getTitle()}" readonly/></td>
+                        <td><input type="text" name="title" value="${articleDTO.getTitle()}" readonly/></td>
                     </tr>
                     <tr>
                         <th>파일</th>
-                        
-                        <c:choose>
-                        	<c:when test="${file != null}">
-                        		<td><a href="#">${file.getoName()}</a>&nbsp;<span>${file.getDownload()}</span>회 다운로드</td>
-                        	</c:when>
-                        	<c:otherwise>
-                        		<td><a href="#"></a>&nbsp;<span></span>첨부파일 없음</td>
-                        	</c:otherwise>
-                        </c:choose>
-                        
+		                <td>
+		                <c:choose>
+		                	<c:when test="${articleDTO.file > 0 }">
+			                	<c:forEach var="file" items="${articleDTO.fileDTOs}">
+			                	<p><a href="/jboard2/fileDownload.do?fno=${file.fno}">${file.oName}</a>&nbsp;<span>${file.download}</span>회 다운로드</p>
+			                	</c:forEach>
+		                	</c:when>
+		                	<c:otherwise>
+		                		<p><a href="#"></a>&nbsp;<span></span></p>
+		                	</c:otherwise>
+		                </c:choose>
+		                </td>
                     </tr>
                     <tr>
                         <th>내용</th>
                         <td>
-                            <textarea name="content" readonly>${article.getContent()}</textarea>
-                        </td>
+		                    <textarea name="content" readonly>${articleDTO.content}</textarea>
+		                </td>
                     </tr>                    
                 </table>
                 
                 <div>
-                    <a href="#" class="btn btnRemove">삭제</a>
-                    <a href="./modify.html" class="btn btnModify">수정</a>
-                    <a href="./list.html" class="btn btnList">목록</a>
+                	<c:if test="${articleDTO.writer == sessUser.uid}">
+	                    <a href="/jboard2/delete.do?no=${articleDTO.no}" class="btn btnRemove">삭제</a>
+	                    <a href="/jboard2/modify.do?no=${articleDTO.no}" class="btn btnModify">수정</a>
+                    </c:if>
+                    <a href="/jboard2/list.do" class="btn btnList">목록</a>
                 </div>
 
                 <!-- 댓글목록 -->
@@ -58,7 +84,7 @@
                 <section class="commentForm">
                     <h3>댓글쓰기</h3>
                     <form action="#">
-                        <textarea name="content">댓글내용 입력</textarea>
+                        <textarea name="content"></textarea>
                         <div>
                             <a href="#" class="btn btnCancel">취소</a>
                             <input type="submit" value="작성완료" class="btn btnComplete"/>

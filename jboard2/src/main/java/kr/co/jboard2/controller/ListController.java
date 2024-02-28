@@ -1,9 +1,7 @@
 package kr.co.jboard2.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -62,14 +60,11 @@ public class ListController extends HttpServlet{
 		
 		// 전달해야하는 값
 		// pageGroupStart, pageGroupEnd, lastPageNum, currentPg, pageStartNum
-		Map<String, Object> pageInfo = new HashMap<>();
-		pageInfo.put("pageGroupStart", pageGroupStart);
-		pageInfo.put("pageGroupEnd", pageGroupEnd);
-		pageInfo.put("lastPageNum", lastPageNum);
-		pageInfo.put("currentPg", currentPg);
-		pageInfo.put("pageStartNum", pageStartNum);
-
-		req.setAttribute("pageInfo", pageInfo);
+		req.setAttribute("pageGroupStart", pageGroupStart);
+		req.setAttribute("pageGroupEnd", pageGroupEnd);
+		req.setAttribute("lastPageNum", lastPageNum);
+		req.setAttribute("currentPg", currentPg);
+		req.setAttribute("pageStartNum", pageStartNum);
 		
 		// 게시글 조회 10개만
 		List<ArticleDTO> articles = service.selectArticles(start);

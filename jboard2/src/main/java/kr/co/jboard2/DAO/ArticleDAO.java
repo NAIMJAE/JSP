@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import kr.co.jboard2.DB.DBHelper;
 import kr.co.jboard2.DB.SQL;
 import kr.co.jboard2.DTO.ArticleDTO;
+import kr.co.jboard2.DTO.FileDTO;
 
 public class ArticleDAO extends DBHelper{
 	private static ArticleDAO instance = new ArticleDAO();
@@ -50,34 +51,54 @@ public class ArticleDAO extends DBHelper{
 	}
 	
 	// 게시글 조회 (view.do)
-	public ArticleDTO selectArticle(int no) {
-		ArticleDTO article = null;
+	public ArticleDTO selectArticle(String no) {
+		
+		ArticleDTO articleDTO = null;
+		List<FileDTO> files = new ArrayList<>();
+		
 		try {
 			conn = getConnection();
 			psmt = conn.prepareStatement(SQL.SELECT_ARTICLE);
-			psmt.setInt(1, no);
-			logger.info(""+psmt);
+			psmt.setString(1, no);
+			logger.info("selectArticle : " + psmt);
+			
 			rs = psmt.executeQuery();
 			
-			if(rs.next()) {
-				article = new ArticleDTO();
-				article.setNo(rs.getInt(1));
-				article.setParent(rs.getInt(2));
-				article.setComment(rs.getInt(3));
-				article.setCate(rs.getString(4));
-				article.setTitle(rs.getString(5));
-				article.setContent(rs.getString(6));
-				article.setFile(rs.getInt(7));
-				article.setHit(rs.getInt(8));
-				article.setWriter(rs.getString(9));
-				article.setRegip(rs.getString(10));
-				article.setRdate(rs.getString(11));
+			while(rs.next()) {
+				if(articleDTO == null) {
+					articleDTO = new ArticleDTO();
+					articleDTO.setNo(rs.getInt(1));
+					articleDTO.setParent(rs.getInt(2));
+					articleDTO.setComment(rs.getInt(3));
+					articleDTO.setCate(rs.getString(4));
+					articleDTO.setTitle(rs.getString(5));
+					articleDTO.setContent(rs.getString(6));
+					articleDTO.setFile(rs.getInt(7));
+					articleDTO.setHit(rs.getInt(8));
+					articleDTO.setWriter(rs.getString(9));
+					articleDTO.setRegip(rs.getString(10));
+					articleDTO.setRdate(rs.getString(11));
+				}
+				
+				FileDTO fileDTO = new FileDTO();
+				fileDTO.setFno(rs.getInt(12));
+				fileDTO.setAno(rs.getInt(13));
+				fileDTO.setoName(rs.getString(14));
+				fileDTO.setsName(rs.getString(15));
+				fileDTO.setDownload(rs.getInt(16));
+				fileDTO.setRdate(rs.getString(17));
+				files.add(fileDTO);
+				logger.info("fileDTO : " + fileDTO);
 			}
+			
+			articleDTO.setFileDTOs(files);
+			
 			CloseAll();
-		} catch (Exception e) {
-			logger.error("selectArticle"+e.getMessage());
+			
+		}catch (Exception e) {
+			logger.error("selectArticle : " + e.getMessage());
 		}
-		return article;
+		return articleDTO;
 	}
 	
 	// 게시글 전체 조회 (list.do)
@@ -116,8 +137,35 @@ public class ArticleDAO extends DBHelper{
 		return articles;
 	}
 	
-	public void updateArticle(ArticleDTO articleDTO) {
+	public int updateArticle(ArticleDTO articleDTO) {
+		int pk = 0;
 		
+		try {
+			conn = getConnection();
+			
+			// insert가 실행되고 자동 생성되는 pk값을 리턴하는 옵션
+			psmt = conn.prepareStatement(SQL.UPDATE_ARTICLE, Statement.RETURN_GENERATED_KEYS);
+			psmt.setString(1, articleDTO.getTitle());
+			psmt.setString(2, articleDTO.getContent());
+			psmt.setInt(3, articleDTO.getFile());
+			psmt.setInt(4, articleDTO.getNo());
+			
+			logger.info("psmt : " + psmt);
+			
+			// insert 실행
+			psmt.executeUpdate();
+			
+			// 생성된 pk 가져오기
+			rs = psmt.getGeneratedKeys();
+			if(rs.next()) {
+				pk = rs.getInt(1);
+			}
+			CloseAll();
+		} catch (Exception e) {
+			logger.error("insertArticle : "+e.getMessage());
+		}
+		
+		return pk;
 	}
 
 	public void deleteArticle(int no) {
@@ -141,5 +189,26 @@ public class ArticleDAO extends DBHelper{
 			logger.error("selectCountTotal" + e.getMessage());
 		}
 		return total;
+	}
+	// file 갯수 조회
+	public int selectArticleFile(int no) {
+		int file = 0;
+		
+		try {
+			
+			conn = getConnection();
+			psmt = conn.prepareStatement(SQL.SELECT_ARTICLE_FILE);
+			psmt.setInt(1, no);
+			
+			rs = psmt.executeQuery();
+			if(rs.next()) {
+				file = rs.getInt(1);
+			}
+			CloseAll();
+		} catch (Exception e) {
+			logger.error("selectArticleFile : "+e.getMessage());
+		}
+		
+		return file;
 	}
 }

@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title>글목록</title>
-    <link rel="stylesheet" href="./css/style.css"/>    
+    <link rel="stylesheet" href="/jboard2/css/style.css"/>    
 </head>
 <body>
     <div id="wrapper">
         <header>
             <h3>Board System v2.0</h3>
             <c:choose>
-                <c:when test="${not empty sessionScope.sessuser}">
+                <c:when test="${not empty sessionScope.sessUser}">
                     <p>
-                        <span>${sessionScope.sessuser.nick}</span>님 반갑습니다.
+                        <span>${sessionScope.sessUser.nick}</span>님 반갑습니다.
                         <a href="/jboard2/user/logout.do">[로그아웃]</a>
                     </p>
                 </c:when>

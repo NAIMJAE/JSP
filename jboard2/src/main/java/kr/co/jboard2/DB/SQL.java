@@ -48,10 +48,14 @@ public class SQL {
 												+ "`sName`=?, "
 												+ "`rdate`=NOW()";
 	
-	public static final String SELECT_ARTICLE = "SELECT * FROM `Article` WHERE `no`=?";
+	public static final String SELECT_ARTICLE = "SELECT * FROM `Article` as a "
+												+ "LEFT JOIN `File` as b ON a.no = b.ano "
+												+ "WHERE `no`=?";
+	
+	public static final String  SELECT_ARTICLE_FILE = "SELECT `file` FROM `Article` WHERE `no`=?";
 	
 	public static final String SELECT_FILE = "SELECT * FROM `File` "
-											+ "WHERE `aNo`=?";
+											+ "WHERE `fNo`=?";
 
 	public static final String SELECT_COUNT_TOTAL = "SELECT COUNT(*) FROM `Article` AS a "
 												+ "JOIN `User` AS b ON a.writer = b.uid "
@@ -75,9 +79,12 @@ public class SQL {
 													
 	public static final String UPDATE_HIT_COUNT = "UPDATE `Article` SET `hit` = `hit` + 1 WHERE `no`=?";
 	
+	public static final String UPDATE_FILE_COUNT = "UPDATE `Article` SET `file` = `file` - 1 WHERE `no`=?";
+	
 	public static final String UPDATE_ARTICLE = "UPDATE `Article` SET "
-												+ "`title` = ?,"
-												+ "`content` = ? "
+												+ "`title` = ?, "
+												+ "`content` = ?, "
+												+ "`file` = ? "
 												+ " WHERE `no`=?";
 	
 	public static final String UPDATE_COMMENT = "UPDATE `Article` SET `content`=? WHERE `no`=?";
@@ -86,6 +93,8 @@ public class SQL {
 	
 	public static final String UPDATE_ARTICLE_COMMENT_MINUS = "UPDATE `Article` SET `comment` = `comment` - 1 WHERE `no`=?";
 	
+	public static final String UPDATE_FILE_DOWNLOAD = "UPDATE `File` SET `download` = `download` +1 WHERE `fno`=?";
+	
 	
 	public static final String DELETE_ARTICLE = "DELETE FROM `Article` WHERE `no`=?";
 	
@@ -93,7 +102,7 @@ public class SQL {
 
 	public static final String DELETE_COMMENTS = "DELETE FROM `Article` WHERE `parent`=?";
 	
-	
+	public static final String DELETE_FILE = "DELETE FROM `File` WHERE `fno`=? ";
 
 	
 	
