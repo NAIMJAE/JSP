@@ -33,6 +33,7 @@ public class DeleteArticleController extends HttpServlet {
 		logger.info("deleteArticleController - doGet");
 		
 		String no = req.getParameter("no");
+		String parent = req.getParameter("parent");
 		// 게시글 번호 no -> 게시글, file테이블, upload 폴더 삭제
 		
 		// file 조회
@@ -46,6 +47,9 @@ public class DeleteArticleController extends HttpServlet {
 		}
 		// 파일 삭제 (순서!!!!!)
 		fileService.deleteFileAll(no);
+		
+		// 댓글 삭제
+		articleService.deleteComment(no, parent);
 		
 		// 게시글 삭제
 		articleService.deleteArticle(no);

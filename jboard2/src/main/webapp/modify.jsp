@@ -16,6 +16,15 @@
 		        var parent = this.parentNode;
 		        var fno = this.dataset.fno;
 		        
+		        /*const data = {
+		        	
+		        		"deleteList": [],
+		        	1. 구지 조회해서 삭제할 필요가 있나?
+		        	2. 완료 버튼 누를때 반복을 돌리는게 아니라
+		        	list를 넘겨서 서버에서 uploads폴더 처리만 반복
+		        };*/
+		        
+		        
 		        if(check) {
 		        	fetch("/jboard2/fileCheck.do?no=" + fno)
 		            .then((response)=>response.json())

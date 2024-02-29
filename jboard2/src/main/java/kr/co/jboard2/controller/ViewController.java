@@ -1,6 +1,7 @@
 package kr.co.jboard2.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -36,8 +37,15 @@ public class ViewController extends HttpServlet{
 		ArticleDTO articleDTO = service.selectArticle(no);
 		logger.debug(""+articleDTO);
 
+		// 조회수 +1 (트랜잭션으로 묶으면 수정시에도 조회수 올라감)
+		service.updateHitCount(no);
+		
+		// 댓글 조회
+		List<ArticleDTO> comments = service.selectComments(no);
+		
 		// view 참조 공유
 		req.setAttribute("articleDTO", articleDTO);
+		req.setAttribute("comments", comments);
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/view.jsp");
 		dispatcher.forward(req, resp);

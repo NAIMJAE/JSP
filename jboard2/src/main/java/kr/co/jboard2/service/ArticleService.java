@@ -163,4 +163,25 @@ public void fileDownload(HttpServletRequest req, HttpServletResponse resp, FileD
 	public int selectArticleFile(int no) {
 		return dao.selectArticleFile(no);
 	}
+	
+	// 댓글 입력
+	public int insertComment(ArticleDTO articleDTO) {
+		return dao.insertComment(articleDTO);
+	}
+	
+	// 댓글 조회
+	public List<ArticleDTO> selectComments(String parent) {
+		return dao.selectComments(parent);
+	}
+	
+	// 댓글 삭제
+	public int deleteComment(String no, String parent) {
+		return dao.deleteComment(no, parent);
+	}
+	
+	// 조회수 +1
+	public void updateHitCount(String no) {
+		dao.updateHitCount(no);
+	}
+	
 }

@@ -67,7 +67,7 @@ public class SQL {
 												+ "JOIN `User` AS b ON a.writer = b.uid "
 												+ "WHERE `parent`=0 ";
 	
-	public static final String SELECT_COMMENTS = "SELECT * FROM `Article` AS a "
+	public static final String SELECT_COMMENTS = "SELECT a.*, b.`nick` FROM `Article` AS a "
 												+ "JOIN `User` AS b ON a.writer = b.uid "
 												+ "WHERE `parent`=? "
 												+ "ORDER BY `no` ASC";

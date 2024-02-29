@@ -27,7 +27,7 @@
                     <c:forEach var="article" items="${articles}">                    
                     <tr>
                         <td>${pageStartNum = pageStartNum - 1}</td>
-                        <td><a href="/jboard2/view.do?no=${article.getNo()}">${article.getTitle()} [${article.getHit()}]</a></td>
+                        <td><a href="/jboard2/view.do?no=${article.getNo()}">${article.getTitle()} [${article.getComment()}]</a></td>
                         <td>${article.getNick()}</td>
                         <td>${fn:substring(article.getRdate(), 0, 10)}</td>
                         <td>${article.getHit()}</td>

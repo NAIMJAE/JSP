@@ -61,7 +61,6 @@ public class ArticleDAO extends DBHelper{
 			psmt = conn.prepareStatement(SQL.SELECT_ARTICLE);
 			psmt.setString(1, no);
 			logger.info("selectArticle : " + psmt);
-			
 			rs = psmt.executeQuery();
 			
 			while(rs.next()) {
@@ -79,7 +78,6 @@ public class ArticleDAO extends DBHelper{
 					articleDTO.setRegip(rs.getString(10));
 					articleDTO.setRdate(rs.getString(11));
 				}
-				
 				FileDTO fileDTO = new FileDTO();
 				fileDTO.setFno(rs.getInt(12));
 				fileDTO.setAno(rs.getInt(13));
@@ -90,11 +88,9 @@ public class ArticleDAO extends DBHelper{
 				files.add(fileDTO);
 				logger.info("fileDTO : " + fileDTO);
 			}
-			
 			articleDTO.setFileDTOs(files);
 			
 			CloseAll();
-			
 		}catch (Exception e) {
 			logger.error("selectArticle : " + e.getMessage());
 		}
@@ -220,5 +216,113 @@ public class ArticleDAO extends DBHelper{
 		}
 		
 		return file;
+	}
+	
+	// 댓글 입력 & 게시글 댓글 수 +1
+	public int insertComment(ArticleDTO articleDTO) {
+		int pk = 0;
+		try {
+			conn = getConnection();
+			conn.setAutoCommit(false);
+
+			psmt = conn.prepareStatement(SQL.INSERT_COMMENT, Statement.RETURN_GENERATED_KEYS);
+			psmt.setInt(1, articleDTO.getParent());
+			psmt.setString(2, articleDTO.getContent());
+			psmt.setString(3, articleDTO.getWriter());
+			psmt.setString(4, articleDTO.getRegip());
+
+			psmtEtc1 = conn.prepareStatement(SQL.UPDATE_ARTICLE_COMMENT_PLUS);
+			psmtEtc1.setInt(1, articleDTO.getParent());
+			
+			logger.info("insertComment : " + psmt);
+			logger.info("insertComment : " + psmtEtc1);
+			
+			psmt.executeUpdate();
+			psmtEtc1.executeUpdate();
+			
+			// INSERT 해서 부여된 AUTO_INCREMENT PK 가져오기
+			rs = psmt.getGeneratedKeys();
+			if(rs.next()) {
+				pk = rs.getInt(1);
+			}
+			conn.commit();
+			CloseAll();
+		} catch (Exception e) {
+			logger.error("insertComment : " + e.getMessage());
+		}
+		return pk;
+	}
+	// 댓글 조회
+	public List<ArticleDTO> selectComments(String parent) {
+		List<ArticleDTO> comments = new ArrayList<ArticleDTO>();
+		
+		try {
+			conn = getConnection();
+			psmt = conn.prepareStatement(SQL.SELECT_COMMENTS);
+			psmt.setString(1, parent);
+			logger.info("selectComments" + psmt);
+			
+			rs = psmt.executeQuery();
+			while(rs.next()) {
+				ArticleDTO article = new ArticleDTO();
+				article.setNo(rs.getInt(1));
+				article.setParent(rs.getInt(2));
+				article.setComment(rs.getInt(3));
+				article.setCate(rs.getString(4));
+				article.setTitle(rs.getString(5));
+				article.setContent(rs.getString(6));
+				article.setFile(rs.getInt(7));
+				article.setHit(rs.getInt(8));
+				article.setWriter(rs.getString(9));
+				article.setRegip(rs.getString(10));
+				article.setRdate(rs.getString(11));
+				article.setNick(rs.getString(12));
+				comments.add(article);
+			}
+			CloseAll();
+		} catch (Exception e) {
+			logger.info("selectComments" + e.getMessage());
+		}
+		return comments;
+	}
+	// 댓글 삭제 & 게시글 댓글 수 -1
+	public int deleteComment(String no, String parent) {
+		int result = 0;
+		try {
+			conn = getConnection();
+			conn.setAutoCommit(false);
+			
+			psmt = conn.prepareStatement(SQL.DELETE_COMMENT);
+			psmt.setString(1, no);
+			
+			psmtEtc1 = conn.prepareStatement(SQL.UPDATE_ARTICLE_COMMENT_MINUS);
+			psmtEtc1.setString(1, parent);
+			
+			logger.info("deleteComment : " + psmt);
+			logger.info("deleteComment : " + psmtEtc1);
+			
+			result = psmt.executeUpdate();
+			psmtEtc1.executeUpdate();
+			
+			conn.commit();
+			CloseAll();
+		} catch (Exception e) {
+			logger.error("deleteComment : " + e.getMessage());
+		}
+		return result;
+	}
+	
+	// 조회수 +1
+	public void updateHitCount(String no) {
+		try {
+			conn = getConnection();
+			psmt = conn.prepareStatement(SQL.UPDATE_HIT_COUNT);
+			psmt.setString(1, no);
+			logger.info("selectArticle : " + psmt);
+			psmt.executeUpdate();
+			CloseAll();
+		} catch (Exception e) {
+			logger.error("updateHitCount" + e.getMessage());
+		}
 	}
 }
